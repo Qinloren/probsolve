@@ -2,6 +2,8 @@ package com.zeeyeh.probsolve.exceptions;
 
 public enum GlobalError {
     UNAUTHORIZED(1001),
+    PARAMETER_ANOMALY(1002),
+    SERVER_ERROR(1002),
     ;
     private final Integer code;
 
