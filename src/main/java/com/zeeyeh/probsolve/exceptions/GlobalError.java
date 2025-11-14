@@ -1,0 +1,24 @@
+package com.zeeyeh.probsolve.exceptions;
+
+public enum GlobalError {
+    UNAUTHORIZED(1001),
+    ;
+    private final Integer code;
+
+    GlobalError(Integer code) {
+        this.code = code;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public static GlobalError valueOf(Integer code) {
+        for (GlobalError value : values()) {
+            if (value.code.equals(code)) {
+                return value;
+            }
+        }
+        return null;
+    }
+}
