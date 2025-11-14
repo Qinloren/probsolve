@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.mapper;
 
 import com.mybatisflex.core.BaseMapper;
-import com.zeeyeh.probsolve.entity.UserLearningStat;
+import com.zeeyeh.probsolve.entity.data.UserLearningStat;
 
 /**
  * 用户学习统计表 映射层。

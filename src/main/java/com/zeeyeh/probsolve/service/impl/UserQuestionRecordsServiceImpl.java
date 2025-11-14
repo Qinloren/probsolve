@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.service.impl;
 
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import com.zeeyeh.probsolve.entity.UserQuestionRecords;
+import com.zeeyeh.probsolve.entity.data.UserQuestionRecords;
 import com.zeeyeh.probsolve.mapper.UserQuestionRecordsMapper;
 import com.zeeyeh.probsolve.service.UserQuestionRecordsService;
 import org.springframework.stereotype.Service;

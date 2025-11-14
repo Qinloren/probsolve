@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.mapper;
 
 import com.mybatisflex.core.BaseMapper;
-import com.zeeyeh.probsolve.entity.QuestionAnswers;
+import com.zeeyeh.probsolve.entity.data.QuestionAnswers;
 
 /**
  * 标准答案表 映射层。

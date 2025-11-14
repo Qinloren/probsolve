@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.mapper;
 
 import com.mybatisflex.core.BaseMapper;
-import com.zeeyeh.probsolve.entity.PracticeRecords;
+import com.zeeyeh.probsolve.entity.data.PracticeRecords;
 
 /**
  * 练习记录表 映射层。

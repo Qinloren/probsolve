@@ -1,4 +1,4 @@
-package com.zeeyeh.probsolve.entity;
+package com.zeeyeh.probsolve.entity.data;
 
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
@@ -10,19 +10,19 @@ import java.io.Serial;
 
 
 /**
- * 错题本 实体类。
+ * 第三方登录表 实体类。
  *
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_error_books")
-public class ErrorBooks implements Serializable {
+@Table("pb_third_party_logins")
+public class ThirdPartyLogins implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 错题Id
+     * 唯一Id
      */
     @Id(keyType = KeyType.Auto)
     private Long id;
@@ -33,17 +33,17 @@ public class ErrorBooks implements Serializable {
     private Long userId;
 
     /**
-     * 题目Id
+     * 第三方平台
      */
-    private Long questionId;
+    private String platform;
 
     /**
-     * 错误原因
+     * 第三方平台用户标识
      */
-    private String reason;
+    private String openId;
 
     /**
-     * 加入错题本时间
+     * 绑定时间
      */
     private LocalDateTime createTime;
 
@@ -63,20 +63,20 @@ public class ErrorBooks implements Serializable {
         this.userId = userId;
     }
 
-    public Long getQuestionId() {
-        return questionId;
+    public String getPlatform() {
+        return platform;
     }
 
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
-    public String getReason() {
-        return reason;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     public LocalDateTime getCreateTime() {

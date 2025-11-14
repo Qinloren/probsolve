@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.service.impl;
 
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import com.zeeyeh.probsolve.entity.QuestionCategoryRelation;
+import com.zeeyeh.probsolve.entity.data.QuestionCategoryRelation;
 import com.zeeyeh.probsolve.mapper.QuestionCategoryRelationMapper;
 import com.zeeyeh.probsolve.service.QuestionCategoryRelationService;
 import org.springframework.stereotype.Service;

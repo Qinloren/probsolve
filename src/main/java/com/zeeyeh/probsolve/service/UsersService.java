@@ -1,7 +1,8 @@
 package com.zeeyeh.probsolve.service;
 
 import com.mybatisflex.core.service.IService;
-import com.zeeyeh.probsolve.entity.Users;
+import com.zeeyeh.probsolve.entity.data.Users;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * 用户表 服务层。
@@ -9,6 +10,6 @@ import com.zeeyeh.probsolve.entity.Users;
  * @author Qinloren
  * @since 1.0.0
  */
-public interface UsersService extends IService<Users> {
+public interface UsersService extends IService<Users>, UserDetailsService {
 
 }

@@ -1,4 +1,4 @@
-package com.zeeyeh.probsolve.entity;
+package com.zeeyeh.probsolve.entity.data;
 
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
@@ -10,40 +10,55 @@ import java.io.Serial;
 
 
 /**
- * 公告表 实体类。
+ * 考试表 实体类。
  *
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_announcements")
-public class Announcements implements Serializable {
+@Table("pb_exams")
+public class Exams implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 公告Id
+     * 考试Id
      */
     @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
-     * 公告标题
+     * 考试标题
      */
     private String title;
 
     /**
-     * 公告内容
+     * 考试说明
      */
-    private String content;
+    private String description;
 
     /**
-     * 是否置顶
+     * 总分
      */
-    private Integer isTop;
+    private Integer totalScore;
 
     /**
-     * 状态(0-草稿,1-发布,2-下架)
+     * 考试时长
+     */
+    private Integer duration;
+
+    /**
+     * 考试开放开始时间(为空随时可考)
+     */
+    private LocalDateTime startTime;
+
+    /**
+     * 考试开放结束时间(为空永久开放)
+     */
+    private LocalDateTime endTime;
+
+    /**
+     * 状态(0-未发布,1-已发布,2-已结束)
      */
     private Integer status;
 
@@ -78,20 +93,44 @@ public class Announcements implements Serializable {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Integer getIsTop() {
-        return isTop;
+    public Integer getTotalScore() {
+        return totalScore;
     }
 
-    public void setIsTop(Integer isTop) {
-        this.isTop = isTop;
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public Integer getStatus() {

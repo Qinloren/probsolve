@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.mapper;
 
 import com.mybatisflex.core.BaseMapper;
-import com.zeeyeh.probsolve.entity.UserProfiles;
+import com.zeeyeh.probsolve.entity.data.UserProfiles;
 
 /**
  * 用户资料表 映射层。

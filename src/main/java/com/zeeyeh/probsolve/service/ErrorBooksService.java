@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.service;
 
 import com.mybatisflex.core.service.IService;
-import com.zeeyeh.probsolve.entity.ErrorBooks;
+import com.zeeyeh.probsolve.entity.data.ErrorBooks;
 
 /**
  * 错题本 服务层。

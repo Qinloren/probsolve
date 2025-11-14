@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.service;
 
 import com.mybatisflex.core.service.IService;
-import com.zeeyeh.probsolve.entity.UserQuestionRecords;
+import com.zeeyeh.probsolve.entity.data.UserQuestionRecords;
 
 /**
  * 用户答题记录表 服务层。

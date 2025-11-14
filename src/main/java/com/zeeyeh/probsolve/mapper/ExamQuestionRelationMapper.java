@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.mapper;
 
 import com.mybatisflex.core.BaseMapper;
-import com.zeeyeh.probsolve.entity.ExamQuestionRelation;
+import com.zeeyeh.probsolve.entity.data.ExamQuestionRelation;
 
 /**
  * 考试-题目关联表 映射层。

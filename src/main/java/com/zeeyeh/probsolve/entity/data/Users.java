@@ -1,4 +1,4 @@
-package com.zeeyeh.probsolve.entity;
+package com.zeeyeh.probsolve.entity.data;
 
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;

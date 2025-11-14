@@ -1,9 +1,11 @@
 package com.zeeyeh.probsolve.service.impl;
 
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import com.zeeyeh.probsolve.entity.Users;
+import com.zeeyeh.probsolve.entity.data.Users;
 import com.zeeyeh.probsolve.mapper.UsersMapper;
 import com.zeeyeh.probsolve.service.UsersService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,6 +15,10 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>  implements UsersService{
+public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>  implements UsersService {
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
 }

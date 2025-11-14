@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.mapper;
 
 import com.mybatisflex.core.BaseMapper;
-import com.zeeyeh.probsolve.entity.QuestionTags;
+import com.zeeyeh.probsolve.entity.data.QuestionTags;
 
 /**
  * 题目标签表 映射层。

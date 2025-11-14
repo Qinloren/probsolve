@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.mapper;
 
 import com.mybatisflex.core.BaseMapper;
-import com.zeeyeh.probsolve.entity.ErrorBooks;
+import com.zeeyeh.probsolve.entity.data.ErrorBooks;
 
 /**
  * 错题本 映射层。

@@ -1,7 +1,7 @@
 package com.zeeyeh.probsolve.mapper;
 
 import com.mybatisflex.core.BaseMapper;
-import com.zeeyeh.probsolve.entity.Announcements;
+import com.zeeyeh.probsolve.entity.data.Announcements;
 
 /**
  * 公告表 映射层。
