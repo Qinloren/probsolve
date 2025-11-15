@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import io.lettuce.core.ClientOptions;
 import io.lettuce.core.api.StatefulConnection;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,13 +18,15 @@ import org.springframework.data.redis.connection.lettuce.LettucePoolingClientCon
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.support.ResourceTransactionManager;
 import org.springframework.util.StringUtils;
 
+import javax.sql.DataSource;
 import java.time.Duration;
 
 @Configuration
 public class RedisConfig {
-
     @Value("${spring.data.redis.host}")
     private String host;
     @Value("${spring.data.redis.port}")
@@ -32,6 +35,8 @@ public class RedisConfig {
     private Integer database;
     @Value("${spring.data.redis.password}")
     private String password;
+    @Value("${spring.data.redis.timeout}")
+    private String timeout;
     @Value("${spring.data.redis.lettuce.pool.max-total}")
     private Integer maxTotal;
     @Value("${spring.data.redis.lettuce.pool.max-idle}")
@@ -39,7 +44,7 @@ public class RedisConfig {
     @Value("${spring.data.redis.lettuce.pool.min-idle}")
     private Integer minIdle;
     @Value("${spring.data.redis.lettuce.pool.max-wait}")
-    private Long maxWait;
+    private String maxWait;
 
     @Bean
     @Primary
@@ -51,12 +56,32 @@ public class RedisConfig {
         if (StringUtils.hasText(password)) {
             configuration.setPassword(password);
         }
+        long timeoutMs = parseDuration(timeout);
         LettucePoolingClientConfiguration.LettucePoolingClientConfigurationBuilder lettucePoolingClientConfigurationBuilder = LettucePoolingClientConfiguration.builder()
                 .poolConfig(createPoolConfig())
-                .commandTimeout(Duration.ofMillis(3000));
+                .clientOptions(ClientOptions.builder()
+                        .autoReconnect(true)
+                        .pingBeforeActivateConnection(true)
+                        .build())
+                .commandTimeout(Duration.ofMillis(timeoutMs))
+                .shutdownTimeout(Duration.ofMillis(timeoutMs));
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(configuration, lettucePoolingClientConfigurationBuilder.build());
+        lettuceConnectionFactory.setValidateConnection(true);
+        lettuceConnectionFactory.setShareNativeConnection(false);
         lettuceConnectionFactory.afterPropertiesSet();
         return lettuceConnectionFactory;
+    }
+
+    private long parseDuration(String duration) {
+        if (!StringUtils.hasLength(duration)) {
+            return 10000;
+        }
+        if (duration.endsWith("ms")) {
+            return Long.parseLong(duration.substring(0, duration.length() - 2));
+        } else if (duration.endsWith("s")) {
+            return Long.parseLong(duration.substring(0, duration.length() - 1)) *1000;
+        }
+        return Long.parseLong(duration);
     }
 
     private GenericObjectPoolConfig<StatefulConnection<?, ?>> createPoolConfig() {
@@ -64,7 +89,14 @@ public class RedisConfig {
         poolConfig.setMaxTotal(maxTotal);
         poolConfig.setMaxIdle(maxIdle);
         poolConfig.setMinIdle(minIdle);
-        poolConfig.setMaxWait(Duration.ofMillis(maxWait));
+        long maxWaitMs = parseDuration(maxWait);
+        poolConfig.setMaxWait(Duration.ofMillis(maxWaitMs));
+        poolConfig.setTestOnBorrow(true);
+        poolConfig.setTestOnReturn(true);
+        poolConfig.setTestWhileIdle(true);
+        poolConfig.setTimeBetweenEvictionRuns(Duration.ofSeconds(60));
+        poolConfig.setMinEvictableIdleDuration(Duration.ofMillis(5));
+        poolConfig.setNumTestsPerEvictionRun(3);
         return poolConfig;
     }
 
@@ -88,5 +120,10 @@ public class RedisConfig {
         redisTemplate.setHashValueSerializer(jsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
+    }
+
+    @Bean
+    public ResourceTransactionManager resourceTransactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
     }
 }

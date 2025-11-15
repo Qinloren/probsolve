@@ -5,10 +5,33 @@ spring:
     name: probsolve
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:33306/probsolve?serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/probsolve?serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
     username: probsolve
     password: probsolve123..
+    type: com.alibaba.druid.pool.DruidDataSource
   data:
     redis:
       host: localhost
       port: 6379
+      database: 0
+      password: ''
+      timeout: 10000ms
+      lettuce:
+        pool:
+          max-total: 8
+          max-idle: 8
+          min-idle: 2
+          max-wait: -1ms
+
+# 应用配置
+app:
+  # token 配置
+  token:
+    # token 密钥
+    secret: probsolve
+    # token 过期配置
+    expire:
+      # token过期时间。默认：1小时
+      value: 3600
+      # 记住我token过期时间。默认：7天
+      persistent: 604800

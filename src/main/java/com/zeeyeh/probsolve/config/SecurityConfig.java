@@ -53,21 +53,6 @@ public class SecurityConfig {
                     .requestMatchers(
                             HttpMethod.GET
                     ).permitAll()
-                    .requestMatchers(
-                            HttpMethod.GET,
-                            "/",
-                            "/*.html",
-                            "/**.html",
-                            "/**.css",
-                            "/**.js"
-                    ).permitAll()
-                    .requestMatchers(
-                            "/error",
-                            "/swagger-ui.html",
-                            "/v3/api-docs/**",
-                            "/swagger-ui/**",
-                            "/webjars/**"
-                    ).permitAll()
                     .anyRequest().authenticated();
                 })
                 .headers(headers -> headers.cacheControl(HeadersConfigurer.CacheControlConfig::disable)

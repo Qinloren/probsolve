@@ -23,13 +23,13 @@ public class TokenProvider {
     /**
      * Token 过期时间（单位：秒），从配置文件中读取。
      */
-    @Value("${vta.token.expire.value}")
+    @Value("${app.token.expire.value}")
     private long EXPIRE_TIME;
 
     /**
      * Token 签名密钥，从配置文件中读取。
      */
-    @Value("${vta.token.secret}")
+    @Value("${app.token.secret}")
     private String SECRET;
 
     /**

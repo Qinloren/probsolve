@@ -3,10 +3,19 @@ package com.zeeyeh.probsolve.entity.data;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
+import com.zeeyeh.probsolve.entity.UserStatus;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import java.io.Serial;
+import java.time.ZoneId;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -16,7 +25,7 @@ import java.io.Serial;
  * @since 1.0.0
  */
 @Table("pb_users")
-public class Users implements Serializable {
+public class Users implements Serializable, UserDetails {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -106,6 +115,31 @@ public class Users implements Serializable {
         this.email = email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role == 1 ? "ADMIN" : "USER"));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return status == UserStatus.PAUSE.ordinal();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return status == UserStatus.PAUSE.ordinal();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return status == UserStatus.NORMAL.ordinal();
+    }
+
     public String getPassword() {
         return password;
     }
@@ -158,24 +192,47 @@ public class Users implements Serializable {
         return createTime;
     }
 
+    public Long getCreateTimestamp() {
+        return createTime != null ? createTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;
+    }
+
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public void setCreateTime(Long createTimestamp) {
+        this.createTime = createTimestamp != null ? LocalDateTime.ofInstant(Instant.ofEpochMilli(createTimestamp), ZoneId.systemDefault()) : null;
     }
 
     public LocalDateTime getUpdateTime() {
         return updateTime;
     }
 
+    public Long getUpdateTimestamp() {
+        return updateTime != null ? updateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;
+    }
+
     public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public void setUpdateTime(Long updateTimestamp) {
+        this.updateTime = updateTimestamp != null ? LocalDateTime.ofInstant(Instant.ofEpochMilli(updateTimestamp), ZoneId.systemDefault()) : null;
     }
 
     public LocalDateTime getLastLoginTime() {
         return lastLoginTime;
     }
 
+    public Long getLastLoginTimestamp() {
+        return lastLoginTime != null ? lastLoginTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;
+    }
+
     public void setLastLoginTime(LocalDateTime lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
 
+    public void setLastLoginTime(Long lastLoginTimestamp) {
+        this.lastLoginTime = lastLoginTimestamp != null ? LocalDateTime.ofInstant(Instant.ofEpochMilli(lastLoginTimestamp), ZoneId.systemDefault()) : null;
+    }
 }

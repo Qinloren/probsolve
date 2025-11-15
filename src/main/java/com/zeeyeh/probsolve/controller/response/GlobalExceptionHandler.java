@@ -12,6 +12,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+import java.net.SocketException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -32,6 +35,12 @@ public class GlobalExceptionHandler {
             message = langProvider.translate(fieldError.getDefaultMessage());
         }
         return R.any(-1, message);
+    }
+
+    @ExceptionHandler({SocketException.class, IOException.class})
+    public R<?> handlerConnectionException(Exception e) {
+        logger.warn("[连接异常] {}: {}", e.getClass().getSimpleName(), e.getMessage());
+        return R.any(-1, langProvider.translate(GlobalError.SERVER_ERROR.name()));
     }
 
     @ExceptionHandler(Exception.class)

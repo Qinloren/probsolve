@@ -2,23 +2,31 @@ package com.zeeyeh.probsolve.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zeeyeh.probsolve.annotations.Secret;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Map;
 
-@Schema(description = "统一响应结果", hidden = true)
+/**
+ * 统一响应结果
+ */
 public class R<T> {
-    @Schema(name = "code", description = "响应码")
+    /**
+     * 响应码
+     */
     private int code;
-    @Schema(name = "message", description = "响应信息")
+    /**
+     * 响应信息
+     */
     private String message;
-    @Schema(name = "timestamp", description = "响应时间")
+    /**
+     * 响应时间
+     */
     private long timestamp;
-    @Schema(name = "data", description = "响应数据")
+    /**
+     * 响应数据
+     */
     @Secret
     private T data;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Schema(hidden = true)
     private Map<String, Object> headers;
 
     public static <T> R<T> success() {
