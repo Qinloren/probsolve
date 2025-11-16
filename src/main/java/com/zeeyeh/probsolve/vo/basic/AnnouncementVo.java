@@ -2,6 +2,9 @@ package com.zeeyeh.probsolve.vo.basic;
 
 import com.zeeyeh.probsolve.entity.data.Announcements;
 
+/**
+ * 公告响应实体
+ */
 public class AnnouncementVo {
     /**
      * 公告Id
