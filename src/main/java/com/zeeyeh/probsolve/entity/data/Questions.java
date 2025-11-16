@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import java.io.Serial;
+import java.time.ZoneId;
 
 
 /**
@@ -164,16 +165,32 @@ public class Questions implements Serializable {
         return createTime;
     }
 
+    public Long getCreateTimestamp() {
+        return createTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public void setCreateTimestamp(LocalDateTime createTimestamp) {
+        this.createTime = createTimestamp;
     }
 
     public LocalDateTime getUpdateTime() {
         return updateTime;
     }
 
+    public Long getUpdateTimestamp() {
+        return updateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
     public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public void setUpdateTimestamp(LocalDateTime updateTimestamp) {
+        this.updateTime = updateTimestamp;
     }
 
     public Integer getTotalAttempts() {

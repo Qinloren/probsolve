@@ -10,7 +10,7 @@ import java.io.Serial;
 
 
 /**
- * 题目分类表 实体类。
+ * 题目分类表 实体类。
  *
  * @author Qinloren
  * @since 1.0.0

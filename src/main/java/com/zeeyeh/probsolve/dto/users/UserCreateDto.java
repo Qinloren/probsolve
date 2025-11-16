@@ -2,11 +2,7 @@ package com.zeeyeh.probsolve.dto.users;
 
 
 /**
- * 用户创建请求实体
- */
-
-/**
- * 用户创建请求实体
+ * 用户创建请求参数
  */
 public class UserCreateDto {
     /**
