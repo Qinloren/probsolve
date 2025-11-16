@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 /**
  * 标准答案表 实体类。
+ * 存储某题的正确答案
  *
  * @author Qinloren
  * @since 1.0.0
@@ -32,9 +33,14 @@ public class QuestionAnswers implements Serializable {
     private Long questionId;
 
     /**
-     * 标准答案
+     * 题目答案选项
      */
     private String content;
+
+    /**
+     * 正确答案
+     */
+    private String answers;
 
     /**
      * 答题提示
@@ -63,6 +69,15 @@ public class QuestionAnswers implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getAnswers() {
+        return answers;
+    }
+
+    public QuestionAnswers setAnswers(String answers) {
+        this.answers = answers;
+        return this;
     }
 
     public String getTips() {
