@@ -114,24 +114,18 @@ public class AnnouncementsServiceImpl extends ServiceImpl<AnnouncementsMapper, A
     @Override
     public AnnouncementSearchVo search(AnnouncementsSearchDto searchDto) {
         QueryWrapper queryWrapper = QueryWrapper.create();
-        if (searchDto.getId() != null) {
-            queryWrapper.eq(Announcements::getId, searchDto.getId());
-        }
-        if (searchDto.getTitle() != null) {
-            queryWrapper.eq(Announcements::getTitle, searchDto.getTitle());
-        }
-        if (searchDto.getContent() != null) {
-            queryWrapper.eq(Announcements::getContent, searchDto.getContent());
-        }
-        if (searchDto.getIsTop() != null) {
-            queryWrapper.eq(Announcements::getIsTop, searchDto.getIsTop());
-        }
-        if (searchDto.getStatus() != null) {
-            queryWrapper.eq(Announcements::getStatus, searchDto.getStatus());
-        }
-        if (searchDto.getUserId() != null) {
-            queryWrapper.eq(Announcements::getUserId, searchDto.getUserId());
-        }
+        Optional.ofNullable(searchDto.getId())
+                .ifPresent(id -> queryWrapper.eq(Announcements::getId, id));
+        Optional.ofNullable(searchDto.getTitle())
+                .ifPresent(title -> queryWrapper.eq(Announcements::getTitle, title));
+        Optional.ofNullable(searchDto.getContent())
+                .ifPresent(content -> queryWrapper.eq(Announcements::getContent, content));
+        Optional.ofNullable(searchDto.getIsTop())
+                .ifPresent(isTop -> queryWrapper.eq(Announcements::getIsTop, isTop));
+        Optional.ofNullable(searchDto.getStatus())
+                .ifPresent(status -> queryWrapper.eq(Announcements::getStatus, status));
+        Optional.ofNullable(searchDto.getUserId())
+                .ifPresent(userId -> queryWrapper.eq(Announcements::getUserId, userId));
         Page<Announcements> page = new Page<>(searchDto.getPage(), searchDto.getPageSize());
         Page<Announcements> announcementsPage = this.page(page, queryWrapper);
         List<AnnouncementVo> list = announcementsPage.getRecords().stream()

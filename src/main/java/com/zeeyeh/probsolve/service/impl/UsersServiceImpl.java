@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -146,24 +147,18 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>  implement
     @Override
     public UserSearchVo search(UserSearchDto searchDto) {
         QueryWrapper queryWrapper = new QueryWrapper();
-        if (StringUtils.hasText(searchDto.getUsername())) {
-            queryWrapper.eq(Users::getUsername, searchDto.getUsername());
-        }
-        if (StringUtils.hasText(searchDto.getEmail())) {
-            queryWrapper.eq(Users::getEmail, searchDto.getEmail());
-        }
-        if (StringUtils.hasText(searchDto.getRole())) {
-            queryWrapper.eq(Users::getRole, searchDto.getRole());
-        }
-        if (StringUtils.hasText(searchDto.getStatus())) {
-            queryWrapper.eq(Users::getStatus, searchDto.getStatus());
-        }
-        if (StringUtils.hasText(searchDto.getTotalScore())) {
-            queryWrapper.eq(Users::getTotalScore, searchDto.getTotalScore());
-        }
-        if (StringUtils.hasText(searchDto.getLevel())) {
-            queryWrapper.eq(Users::getLevel, searchDto.getLevel());
-        }
+        Optional.ofNullable(searchDto.getUsername())
+                .ifPresent(username -> queryWrapper.eq(Users::getUsername, username));
+        Optional.ofNullable(searchDto.getEmail())
+                .ifPresent(email -> queryWrapper.eq(Users::getEmail, email));
+        Optional.ofNullable(searchDto.getRole())
+                .ifPresent(role -> queryWrapper.eq(Users::getRole, role));
+        Optional.ofNullable(searchDto.getStatus())
+                .ifPresent(status -> queryWrapper.eq(Users::getStatus, status));
+        Optional.ofNullable(searchDto.getTotalScore())
+                .ifPresent(totalScore -> queryWrapper.eq(Users::getTotalScore, totalScore));
+        Optional.ofNullable(searchDto.getLevel())
+                .ifPresent(level -> queryWrapper.eq(Users::getLevel, level));
         Page<Users> page = new Page<>(searchDto.getPage(), searchDto.getPageSize());
         Page<Users> usersPage = this.page(page, queryWrapper);
         List<UserVo> list = usersPage.getRecords().stream()
