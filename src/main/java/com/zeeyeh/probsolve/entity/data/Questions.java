@@ -34,7 +34,7 @@ public class Questions implements Serializable {
     private String content;
 
     /**
-     * 体型
+     * 题型
      */
     private Integer type;
 

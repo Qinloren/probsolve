@@ -40,7 +40,21 @@ public class UserSearchDto extends BaseSearchDto {
     public UserSearchDto() {
     }
 
+    public UserSearchDto(Integer page, Integer pageSize) {
+        super(page, pageSize);
+    }
+
     public UserSearchDto(String username, String email, String role, String status, String totalScore, String level) {
+        this.username = username;
+        this.email = email;
+        this.role = role;
+        this.status = status;
+        this.totalScore = totalScore;
+        this.level = level;
+    }
+
+    public UserSearchDto(Integer page, Integer pageSize, String username, String email, String role, String status, String totalScore, String level) {
+        super(page, pageSize);
         this.username = username;
         this.email = email;
         this.role = role;

@@ -43,20 +43,29 @@ import java.util.concurrent.TimeUnit;
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>  implements UsersService {
 
     private static final Logger log = LoggerFactory.getLogger(UsersServiceImpl.class);
+    private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
+    private final RedisProvider redisProvider;
     @Value("${app.token.expire.value}")
     private Long tokenExpire;
 
     @Value("${app.token.expire.persistent}")
     private Long tokenExpirePersistent;
 
-    @Resource
-    PasswordEncoder passwordEncoder;
+    public UsersServiceImpl(PasswordEncoder passwordEncoder, TokenProvider tokenProvider, RedisProvider redisProvider) {
+        this.passwordEncoder = passwordEncoder;
+        this.tokenProvider = tokenProvider;
+        this.redisProvider = redisProvider;
+    }
 
-    @Resource
-    TokenProvider tokenProvider;
+    // @Resource
+    // PasswordEncoder passwordEncoder;
 
-    @Resource
-    RedisProvider redisProvider;
+    // @Resource
+    // TokenProvider tokenProvider;
+
+    // @Resource
+    // RedisProvider redisProvider;
 
     @Override
     public UserVo create(UserCreateDto createDto) {

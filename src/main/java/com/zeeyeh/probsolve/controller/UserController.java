@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("sys/user")
 public class UserController {
 
-    @Resource
-    UsersService usersService;
+    private final UsersService usersService;
+
+    public UserController(UsersService usersService) {
+        this.usersService = usersService;
+    }
 
     /**
      * 创建用户接口

@@ -4,9 +4,11 @@ import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import java.io.Serial;
+import java.time.ZoneId;
 
 
 /**
@@ -114,16 +116,31 @@ public class Announcements implements Serializable {
         return createTime;
     }
 
+    public Long getCreateTimestamp() {
+        return createTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public void setCreateTime(Long createTimestamp) {
+        this.createTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(createTimestamp), ZoneId.systemDefault());
     }
 
     public LocalDateTime getUpdateTime() {
         return updateTime;
     }
 
+    public Long getUpdateTimestamp() {
+        return updateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
     public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
     }
 
+    public void setUpdateTime(Long updateTimestamp) {
+        this.updateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(updateTimestamp), ZoneId.systemDefault());
+    }
 }
