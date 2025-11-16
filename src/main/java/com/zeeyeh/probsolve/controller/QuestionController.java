@@ -8,6 +8,9 @@ import com.zeeyeh.probsolve.vo.basic.QuestionVo;
 import com.zeeyeh.probsolve.vo.search.QuestionSearchVo;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 题目接口
+ */
 @RestController
 @RequestMapping("sys/question")
 public class QuestionController {

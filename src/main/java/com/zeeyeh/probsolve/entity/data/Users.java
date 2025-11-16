@@ -8,11 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
-
-import java.io.Serial;
 import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;

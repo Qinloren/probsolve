@@ -3,11 +3,11 @@ package com.zeeyeh.probsolve.entity.data;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-import java.io.Serial;
 import java.time.ZoneId;
 
 
@@ -182,15 +182,15 @@ public class Questions implements Serializable {
     }
 
     public Long getUpdateTimestamp() {
-        return updateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        return updateTime != null ? updateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;
     }
 
     public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
     }
 
-    public void setUpdateTimestamp(LocalDateTime updateTimestamp) {
-        this.updateTime = updateTimestamp;
+    public void setUpdateTimestamp(Long updateTimestamp) {
+        this.updateTime = updateTimestamp != null ? LocalDateTime.ofInstant(java.time.Instant.ofEpochMilli(updateTimestamp), ZoneId.systemDefault()) : null;
     }
 
     public Integer getTotalAttempts() {

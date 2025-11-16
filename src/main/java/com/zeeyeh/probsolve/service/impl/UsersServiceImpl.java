@@ -1,7 +1,6 @@
 package com.zeeyeh.probsolve.service.impl;
 
 import com.mybatisflex.core.paginate.Page;
-import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zeeyeh.probsolve.dto.users.UserCreateDto;
@@ -18,7 +17,6 @@ import com.zeeyeh.probsolve.provider.TokenProvider;
 import com.zeeyeh.probsolve.service.UsersService;
 import com.zeeyeh.probsolve.vo.basic.UserVo;
 import com.zeeyeh.probsolve.vo.search.UserSearchVo;
-import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -166,7 +164,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>  implement
                 .toList();
         return new UserSearchVo(
                 list,
-                page.getTotalRow(),
+                page.getTotalPage(),
                 page.getPageNumber(),
                 page.getPageSize()
         );

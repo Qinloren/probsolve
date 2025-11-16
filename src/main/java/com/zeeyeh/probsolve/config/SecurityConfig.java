@@ -1,10 +1,10 @@
 package com.zeeyeh.probsolve.config;
 
 import com.alibaba.fastjson2.JSON;
+import com.zeeyeh.probsolve.config.handler.LogoutSuccessHandlerImpl;
 import com.zeeyeh.probsolve.entity.R;
 import com.zeeyeh.probsolve.exceptions.GlobalError;
 import com.zeeyeh.probsolve.filter.SecurityFilter;
-import com.zeeyeh.probsolve.config.handler.LogoutSuccessHandlerImpl;
 import com.zeeyeh.probsolve.provider.LangProvider;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;

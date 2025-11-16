@@ -3,10 +3,10 @@ package com.zeeyeh.probsolve.entity.data;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 /**

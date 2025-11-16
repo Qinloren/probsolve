@@ -3,7 +3,6 @@ package com.zeeyeh.probsolve.service.impl;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.update.UpdateChain;
-import com.mybatisflex.spring.TimeoutHolder;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zeeyeh.probsolve.dto.question.QuestionCreateDto;
 import com.zeeyeh.probsolve.dto.question.QuestionSearchDto;
@@ -17,7 +16,6 @@ import com.zeeyeh.probsolve.service.QuestionsService;
 import com.zeeyeh.probsolve.service.UsersService;
 import com.zeeyeh.probsolve.vo.basic.QuestionVo;
 import com.zeeyeh.probsolve.vo.search.QuestionSearchVo;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -157,7 +155,7 @@ public class QuestionsServiceImpl extends ServiceImpl<QuestionsMapper, Questions
                 .toList();
         return new QuestionSearchVo(
                 list,
-                page.getTotalRow(),
+                page.getTotalPage(),
                 page.getPageNumber(),
                 page.getPageSize()
         );

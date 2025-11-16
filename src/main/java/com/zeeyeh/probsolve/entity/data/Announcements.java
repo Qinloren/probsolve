@@ -3,11 +3,11 @@ package com.zeeyeh.probsolve.entity.data;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
-
-import java.io.Serial;
 import java.time.ZoneId;
 
 
@@ -117,7 +117,7 @@ public class Announcements implements Serializable {
     }
 
     public Long getCreateTimestamp() {
-        return createTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        return createTime != null ? createTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;
     }
 
     public void setCreateTime(LocalDateTime createTime) {
@@ -125,7 +125,7 @@ public class Announcements implements Serializable {
     }
 
     public void setCreateTime(Long createTimestamp) {
-        this.createTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(createTimestamp), ZoneId.systemDefault());
+        this.createTime = createTime != null ? LocalDateTime.ofInstant(Instant.ofEpochMilli(createTimestamp), ZoneId.systemDefault()) : null;
     }
 
     public LocalDateTime getUpdateTime() {
@@ -133,7 +133,7 @@ public class Announcements implements Serializable {
     }
 
     public Long getUpdateTimestamp() {
-        return updateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        return updateTime != null ? updateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;
     }
 
     public void setUpdateTime(LocalDateTime updateTime) {
@@ -141,6 +141,6 @@ public class Announcements implements Serializable {
     }
 
     public void setUpdateTime(Long updateTimestamp) {
-        this.updateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(updateTimestamp), ZoneId.systemDefault());
+        this.updateTime = updateTime != null ? LocalDateTime.ofInstant(Instant.ofEpochMilli(updateTimestamp), ZoneId.systemDefault()) : null;
     }
 }

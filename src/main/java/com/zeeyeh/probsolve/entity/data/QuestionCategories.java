@@ -3,10 +3,11 @@ package com.zeeyeh.probsolve.entity.data;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 
 /**
@@ -31,11 +32,6 @@ public class QuestionCategories implements Serializable {
      * 分类名称
      */
     private String name;
-
-    /**
-     * 父分类Id
-     */
-    private Long parentId;
 
     /**
      * 排序权重
@@ -73,14 +69,6 @@ public class QuestionCategories implements Serializable {
         this.name = name;
     }
 
-    public Long getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
-
     public Integer getSort() {
         return sort;
     }
@@ -101,16 +89,31 @@ public class QuestionCategories implements Serializable {
         return createTime;
     }
 
+    public Long getCreateTimestamp() {
+        return createTime != null ? createTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;
+    }
+
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public void setCreateTimestamp(Long createTimestamp) {
+        this.createTime = createTimestamp != null ? LocalDateTime.ofInstant(java.time.Instant.ofEpochMilli(createTimestamp), ZoneId.systemDefault()) : null;
     }
 
     public LocalDateTime getUpdateTime() {
         return updateTime;
     }
 
+    public Long getUpdateTimestamp() {
+        return updateTime != null ? updateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;
+    }
+
     public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
     }
 
+    public void setUpdateTimestamp(Long updateTimestamp) {
+        this.updateTime = updateTimestamp != null ? LocalDateTime.ofInstant(java.time.Instant.ofEpochMilli(updateTimestamp), ZoneId.systemDefault()) : null;
+    }
 }

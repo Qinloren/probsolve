@@ -8,11 +8,10 @@ import com.zeeyeh.probsolve.entity.R;
 import com.zeeyeh.probsolve.service.UsersService;
 import com.zeeyeh.probsolve.vo.basic.UserVo;
 import com.zeeyeh.probsolve.vo.search.UserSearchVo;
-import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 用户表 控制层。
+ * 用户接口
  */
 @RestController
 @RequestMapping("sys/user")

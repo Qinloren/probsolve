@@ -8,6 +8,9 @@ import com.zeeyeh.probsolve.vo.basic.AnnouncementVo;
 import com.zeeyeh.probsolve.vo.search.AnnouncementSearchVo;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 公告接口
+ */
 @RestController
 @RequestMapping("sys/announcement")
 public class AnnouncementController {

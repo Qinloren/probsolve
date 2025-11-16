@@ -3,7 +3,6 @@ package com.zeeyeh.probsolve.service.impl;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.update.UpdateChain;
-import com.mybatisflex.core.update.UpdateWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zeeyeh.probsolve.dto.announcements.AnnouncementsCreateDto;
 import com.zeeyeh.probsolve.dto.announcements.AnnouncementsSearchDto;
@@ -133,7 +132,7 @@ public class AnnouncementsServiceImpl extends ServiceImpl<AnnouncementsMapper, A
                 .toList();
         return new AnnouncementSearchVo(
                 list,
-                page.getTotalRow(),
+                page.getTotalPage(),
                 page.getPageNumber(),
                 page.getPageSize()
         );
