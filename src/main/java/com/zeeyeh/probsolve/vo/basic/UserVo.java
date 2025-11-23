@@ -3,6 +3,8 @@ package com.zeeyeh.probsolve.vo.basic;
 
 import com.zeeyeh.probsolve.entity.data.Users;
 
+import java.math.BigDecimal;
+
 
 /**
  * 用户响应实体
@@ -64,6 +66,18 @@ public class UserVo {
  */
     private Long lastLoginTime;
 
+    /**
+     * 总答题次数
+     */
+    private Integer totalAttempts;
+
+    /**
+     * 正确率
+     */
+    private BigDecimal correctRate;
+
+    private Integer totalExams;
+
     public static UserVo of(Users user) {
         return new UserVo()
                 .setId(user.getId())
@@ -76,13 +90,16 @@ public class UserVo {
                 .setLevel(user.getLevel())
                 .setCreateTime(user.getCreateTimestamp())
                 .setUpdateTime(user.getUpdateTimestamp())
-                .setLastLoginTime(user.getLastLoginTimestamp());
+                .setLastLoginTime(user.getLastLoginTimestamp())
+                .setTotalAttempts(user.getTotalAttempts())
+                .setCorrectRate(user.getCorrectRate())
+                .setTotalExams(user.getTotalExams());
     }
 
     public UserVo() {
     }
 
-    public UserVo(Long id, String username, String email, Integer role, Integer status, String avatar, Integer totalScore, Integer level, Long createTime, Long updateTime, Long lastLoginTime) {
+    public UserVo(Long id, String username, String email, Integer role, Integer status, String avatar, Integer totalScore, Integer level, Long createTime, Long updateTime, Long lastLoginTime, Integer totalAttempts, BigDecimal correctRate, Integer totalExams) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -94,6 +111,9 @@ public class UserVo {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.lastLoginTime = lastLoginTime;
+        this.totalAttempts = totalAttempts;
+        this.correctRate = correctRate;
+        this.totalExams = totalExams;
     }
 
     public Long getId() {
@@ -192,6 +212,33 @@ public class UserVo {
 
     public UserVo setLastLoginTime(Long lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+        return this;
+    }
+
+    public Integer getTotalAttempts() {
+        return totalAttempts;
+    }
+
+    public UserVo setTotalAttempts(Integer totalAttempts) {
+        this.totalAttempts = totalAttempts;
+        return this;
+    }
+
+    public BigDecimal getCorrectRate() {
+        return correctRate;
+    }
+
+    public UserVo setCorrectRate(BigDecimal correctRate) {
+        this.correctRate = correctRate;
+        return this;
+    }
+
+    public Integer getTotalExams() {
+        return totalExams;
+    }
+
+    public UserVo setTotalExams(Integer totalExams) {
+        this.totalExams = totalExams;
         return this;
     }
 }

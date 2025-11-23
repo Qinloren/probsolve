@@ -8,6 +8,9 @@ import com.zeeyeh.probsolve.entity.R;
 import com.zeeyeh.probsolve.service.UsersService;
 import com.zeeyeh.probsolve.vo.basic.UserVo;
 import com.zeeyeh.probsolve.vo.search.UserSearchVo;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -76,5 +79,11 @@ public class UserController {
     @ResponseBody
     public UserVo detail(@RequestParam long id) {
         return usersService.detail(id);
+    }
+
+    @GetMapping("validate")
+    @ResponseBody
+    public R<Boolean> validate(HttpServletRequest request) {
+        return usersService.validate(request);
     }
 }

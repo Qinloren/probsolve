@@ -7,6 +7,7 @@ import com.zeeyeh.probsolve.dto.announcements.AnnouncementsUpdateDto;
 import com.zeeyeh.probsolve.entity.data.Announcements;
 import com.zeeyeh.probsolve.vo.basic.AnnouncementVo;
 import com.zeeyeh.probsolve.vo.search.AnnouncementSearchVo;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 公告表 服务层。
@@ -14,6 +15,7 @@ import com.zeeyeh.probsolve.vo.search.AnnouncementSearchVo;
  * @author Qinloren
  * @since 1.0.0
  */
+@Transactional(rollbackFor = Exception.class)
 public interface AnnouncementsService extends IService<Announcements> {
 
     /**

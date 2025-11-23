@@ -34,6 +34,11 @@ public class QuestionCategories implements Serializable {
     private String name;
 
     /**
+     * 创建者用户Id
+     */
+    private long userId;
+
+    /**
      * 排序权重
      */
     private Integer sort;
@@ -67,6 +72,15 @@ public class QuestionCategories implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public QuestionCategories setUserId(long userId) {
+        this.userId = userId;
+        return this;
     }
 
     public Integer getSort() {

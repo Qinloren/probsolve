@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -89,6 +90,21 @@ public class Users implements Serializable, UserDetails {
      * 最后登录时间
      */
     private LocalDateTime lastLoginTime;
+
+    /**
+     * 总答题次数
+     */
+    private Integer totalAttempts;
+
+    /**
+     * 正确率
+     */
+    private BigDecimal correctRate;
+
+    /**
+     * 总答题次数
+     */
+    private Integer totalExams;
 
     public Long getId() {
         return id;
@@ -233,5 +249,30 @@ public class Users implements Serializable, UserDetails {
 
     public void setLastLoginTime(Long lastLoginTimestamp) {
         this.lastLoginTime = lastLoginTimestamp != null ? LocalDateTime.ofInstant(Instant.ofEpochMilli(lastLoginTimestamp), ZoneId.systemDefault()) : null;
+    }
+
+    public Integer getTotalAttempts() {
+        return totalAttempts;
+    }
+
+    public void setTotalAttempts(Integer totalAttempts) {
+        this.totalAttempts = totalAttempts;
+    }
+
+    public BigDecimal getCorrectRate() {
+        return correctRate;
+    }
+
+    public void setCorrectRate(BigDecimal correctRate) {
+        this.correctRate = correctRate;
+    }
+
+    public Integer getTotalExams() {
+        return totalExams;
+    }
+
+    public Users setTotalExams(Integer totalExams) {
+        this.totalExams = totalExams;
+        return this;
     }
 }

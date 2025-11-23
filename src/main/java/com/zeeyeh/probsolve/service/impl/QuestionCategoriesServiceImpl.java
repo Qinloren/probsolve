@@ -34,6 +34,7 @@ public class QuestionCategoriesServiceImpl extends ServiceImpl<QuestionCategorie
             throw new ServiceException(GlobalError.QUESTION_CATEGORY_ALREADY_FOUND);
         }
         QuestionCategories questionCategories = new QuestionCategories();
+        questionCategories.setUserId(createDto.getUserId());
         questionCategories.setName(createDto.getName());
         questionCategories.setSort(createDto.getSort());
         questionCategories.setStatus(createDto.getStatus());
@@ -54,6 +55,8 @@ public class QuestionCategoriesServiceImpl extends ServiceImpl<QuestionCategorie
         UpdateChain<QuestionCategories> updatedChain = this.updateChain();
         Optional.ofNullable(updateDto.getName())
                 .ifPresent(name -> updatedChain.set(QuestionCategories::getName, name));
+        Optional.ofNullable(updateDto.getUserId())
+                .ifPresent(userId -> updatedChain.set(QuestionCategories::getUserId, userId));
         Optional.ofNullable(updateDto.getSort())
                 .ifPresent(sort -> updatedChain.set(QuestionCategories::getSort, sort));
         Optional.ofNullable(updateDto.getStatus())
@@ -92,13 +95,15 @@ public class QuestionCategoriesServiceImpl extends ServiceImpl<QuestionCategorie
     public QuestionCategorySearchVo search(QuestionCategorySearchDto searchDto) {
         QueryWrapper queryWrapper = QueryWrapper.create();
         Optional.ofNullable(searchDto.getId())
-                .ifPresent(id -> queryWrapper.like(QuestionCategories::getId, id));
+                .ifPresent(id -> queryWrapper.eq(QuestionCategories::getId, id));
         Optional.ofNullable(searchDto.getName())
                 .ifPresent(name -> queryWrapper.like(QuestionCategories::getName, name));
+        Optional.ofNullable(searchDto.getUserId())
+                .ifPresent(userId -> queryWrapper.eq(QuestionCategories::getUserId, userId));
         Optional.ofNullable(searchDto.getSort())
-                .ifPresent(sort -> queryWrapper.like(QuestionCategories::getSort, sort));
+                .ifPresent(sort -> queryWrapper.eq(QuestionCategories::getSort, sort));
         Optional.ofNullable(searchDto.getStatus())
-                .ifPresent(status -> queryWrapper.like(QuestionCategories::getStatus, status));
+                .ifPresent(status -> queryWrapper.eq(QuestionCategories::getStatus, status));
         Page<QuestionCategories> page = new Page<>(searchDto.getPage(), searchDto.getPageSize());
         Page<QuestionCategories> categoriesPage = this.page(page, queryWrapper);
         List<QuestionCategoryVo> list = categoriesPage.getRecords()

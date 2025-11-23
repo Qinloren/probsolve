@@ -7,6 +7,7 @@ import com.zeeyeh.probsolve.dto.question.answer.QuestionAnswerUpdateDto;
 import com.zeeyeh.probsolve.entity.data.QuestionAnswers;
 import com.zeeyeh.probsolve.vo.basic.QuestionAnswerVo;
 import com.zeeyeh.probsolve.vo.search.QuestionAnswerSearchVo;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 答案表 服务层。
@@ -14,6 +15,7 @@ import com.zeeyeh.probsolve.vo.search.QuestionAnswerSearchVo;
  * @author Qinloren
  * @since 1.0.0
  */
+@Transactional(rollbackFor = Exception.class)
 public interface QuestionAnswersService extends IService<QuestionAnswers> {
 
     /**

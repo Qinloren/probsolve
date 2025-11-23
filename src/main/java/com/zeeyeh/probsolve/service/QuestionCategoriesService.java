@@ -7,6 +7,7 @@ import com.zeeyeh.probsolve.dto.question.category.QuestionCategoryUpdateDto;
 import com.zeeyeh.probsolve.entity.data.QuestionCategories;
 import com.zeeyeh.probsolve.vo.basic.QuestionCategoryVo;
 import com.zeeyeh.probsolve.vo.search.QuestionCategorySearchVo;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 题目分类表 服务层。
@@ -14,6 +15,7 @@ import com.zeeyeh.probsolve.vo.search.QuestionCategorySearchVo;
  * @author Qinloren
  * @since 1.0.0
  */
+@Transactional(rollbackFor = Exception.class)
 public interface QuestionCategoriesService extends IService<QuestionCategories> {
     /**
      * 创建题目分类

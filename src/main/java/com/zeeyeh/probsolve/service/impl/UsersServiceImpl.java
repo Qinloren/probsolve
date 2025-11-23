@@ -17,15 +17,19 @@ import com.zeeyeh.probsolve.provider.TokenProvider;
 import com.zeeyeh.probsolve.service.UsersService;
 import com.zeeyeh.probsolve.vo.basic.UserVo;
 import com.zeeyeh.probsolve.vo.search.UserSearchVo;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.rmi.ServerException;
+import java.rmi.server.ServerCloneException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -56,15 +60,6 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>  implement
         this.tokenProvider = tokenProvider;
         this.redisProvider = redisProvider;
     }
-
-    // @Resource
-    // PasswordEncoder passwordEncoder;
-
-    // @Resource
-    // TokenProvider tokenProvider;
-
-    // @Resource
-    // RedisProvider redisProvider;
 
     @Override
     public UserVo create(UserCreateDto createDto) {
@@ -187,5 +182,23 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>  implement
         }
         Users users = this.getOne(queryWrapper);
         return UserVo.of(users);
+    }
+
+    @Override
+    public R<Boolean> validate(HttpServletRequest request) {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (StringUtils.hasText(header)) {
+            boolean verified = tokenProvider.verifyToken(header);
+            Long id = tokenProvider.getClaim(header, "id").asLong();
+            if (!redisProvider.has("token:user:" + id)) {
+                throw new ServiceException(GlobalError.UNAUTHORIZED);
+            }
+            String saveToken = redisProvider.get("token:user:" + id);
+            if (!saveToken.equals(header)) {
+                throw new ServiceException(GlobalError.UNAUTHORIZED);
+            }
+            return R.success(verified);
+        }
+        throw new ServiceException(GlobalError.UNAUTHORIZED);
     }
 }

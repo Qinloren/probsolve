@@ -79,16 +79,6 @@ public class Questions implements Serializable {
      */
     private LocalDateTime updateTime;
 
-    /**
-     * 总答题次数
-     */
-    private Integer totalAttempts;
-
-    /**
-     * 正确率
-     */
-    private BigDecimal correctRate;
-
     public Long getId() {
         return id;
     }
@@ -191,22 +181,6 @@ public class Questions implements Serializable {
 
     public void setUpdateTimestamp(Long updateTimestamp) {
         this.updateTime = updateTimestamp != null ? LocalDateTime.ofInstant(java.time.Instant.ofEpochMilli(updateTimestamp), ZoneId.systemDefault()) : null;
-    }
-
-    public Integer getTotalAttempts() {
-        return totalAttempts;
-    }
-
-    public void setTotalAttempts(Integer totalAttempts) {
-        this.totalAttempts = totalAttempts;
-    }
-
-    public BigDecimal getCorrectRate() {
-        return correctRate;
-    }
-
-    public void setCorrectRate(BigDecimal correctRate) {
-        this.correctRate = correctRate;
     }
 
 }

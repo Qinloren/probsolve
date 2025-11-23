@@ -35,3 +35,5 @@ app:
       value: 3600
       # 记住我token过期时间。默认：7天
       persistent: 604800
+  upload:
+    path: ./data/upload

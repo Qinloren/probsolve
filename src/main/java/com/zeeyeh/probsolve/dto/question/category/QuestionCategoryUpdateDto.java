@@ -11,6 +11,11 @@ public class QuestionCategoryUpdateDto {
     private Long id;
 
     /**
+     * 创建者用户Id
+     */
+    private Long userId;
+
+    /**
      * 分类名称
      */
     private String name;
@@ -28,8 +33,9 @@ public class QuestionCategoryUpdateDto {
     public QuestionCategoryUpdateDto() {
     }
 
-    public QuestionCategoryUpdateDto(Long id, String name, Integer sort, Integer status) {
+    public QuestionCategoryUpdateDto(Long id, Long userId, String name, Integer sort, Integer status) {
         this.id = id;
+        this.userId = userId;
         this.name = name;
         this.sort = sort;
         this.status = status;
@@ -50,6 +56,15 @@ public class QuestionCategoryUpdateDto {
 
     public QuestionCategoryUpdateDto setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public QuestionCategoryUpdateDto setUserId(Long userId) {
+        this.userId = userId;
         return this;
     }
 

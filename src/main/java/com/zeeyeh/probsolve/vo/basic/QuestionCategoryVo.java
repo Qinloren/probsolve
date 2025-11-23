@@ -13,6 +13,11 @@ public class QuestionCategoryVo {
     private Long id;
 
     /**
+     * 创建者用户Id
+     */
+    private Long userId;
+
+    /**
      * 分类名称
      */
     private String name;
@@ -44,6 +49,7 @@ public class QuestionCategoryVo {
         return new QuestionCategoryVo()
                 .setId(questionCategories.getId())
                 .setName(questionCategories.getName())
+                .setUserId(questionCategories.getUserId())
                 .setSort(questionCategories.getSort())
                 .setStatus(questionCategories.getStatus())
                 .setCreateTime(questionCategories.getCreateTimestamp())
@@ -74,6 +80,15 @@ public class QuestionCategoryVo {
 
     public QuestionCategoryVo setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public QuestionCategoryVo setUserId(Long userId) {
+        this.userId = userId;
         return this;
     }
 

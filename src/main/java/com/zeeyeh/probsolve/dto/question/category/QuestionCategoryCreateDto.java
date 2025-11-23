@@ -11,6 +11,11 @@ public class QuestionCategoryCreateDto {
     private String name;
 
     /**
+     * 创建者Id
+     */
+    private Long userId;
+
+    /**
      * 排序权重
      */
     private Integer sort;
@@ -23,8 +28,9 @@ public class QuestionCategoryCreateDto {
     public QuestionCategoryCreateDto() {
     }
 
-    public QuestionCategoryCreateDto(String name, Integer sort, Integer status) {
+    public QuestionCategoryCreateDto(String name, Long userId, Integer sort, Integer status) {
         this.name = name;
+        this.userId = userId;
         this.sort = sort;
         this.status = status;
     }
@@ -35,6 +41,15 @@ public class QuestionCategoryCreateDto {
 
     public QuestionCategoryCreateDto setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public QuestionCategoryCreateDto setUserId(Long userId) {
+        this.userId = userId;
         return this;
     }
 

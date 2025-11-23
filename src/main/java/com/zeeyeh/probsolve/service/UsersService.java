@@ -9,7 +9,9 @@ import com.zeeyeh.probsolve.entity.R;
 import com.zeeyeh.probsolve.entity.data.Users;
 import com.zeeyeh.probsolve.vo.basic.UserVo;
 import com.zeeyeh.probsolve.vo.search.UserSearchVo;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 用户表 服务层。
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * @author Qinloren
  * @since 1.0.0
  */
+@Transactional(rollbackFor = Exception.class)
 public interface UsersService extends IService<Users>, UserDetailsService {
 
     /**
@@ -53,4 +56,11 @@ public interface UsersService extends IService<Users>, UserDetailsService {
      * @return 用户详情
      */
     UserVo detail(long id);
+
+    /**
+     * 验证用户
+     * @param request 请求
+     * @return 验证结果
+     */
+    R<Boolean> validate(HttpServletRequest request);
 }
