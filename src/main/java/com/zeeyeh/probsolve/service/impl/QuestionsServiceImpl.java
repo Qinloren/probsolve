@@ -7,11 +7,13 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zeeyeh.probsolve.dto.question.QuestionCreateDto;
 import com.zeeyeh.probsolve.dto.question.QuestionSearchDto;
 import com.zeeyeh.probsolve.dto.question.QuestionUpdateDto;
+import com.zeeyeh.probsolve.dto.question.QuestionValidationDto;
 import com.zeeyeh.probsolve.entity.data.Questions;
 import com.zeeyeh.probsolve.entity.data.Users;
 import com.zeeyeh.probsolve.exceptions.GlobalError;
 import com.zeeyeh.probsolve.exceptions.ServiceException;
 import com.zeeyeh.probsolve.mapper.QuestionsMapper;
+import com.zeeyeh.probsolve.questions.QuestionValidatorManager;
 import com.zeeyeh.probsolve.service.QuestionsService;
 import com.zeeyeh.probsolve.service.UsersService;
 import com.zeeyeh.probsolve.vo.basic.QuestionVo;
@@ -32,9 +34,11 @@ import java.util.Optional;
 public class QuestionsServiceImpl extends ServiceImpl<QuestionsMapper, Questions>  implements QuestionsService {
 
     private final UsersService usersService;
+    private final QuestionValidatorManager questionValidatorManager;
 
-    public QuestionsServiceImpl(UsersService usersService) {
+    public QuestionsServiceImpl(UsersService usersService, QuestionValidatorManager questionValidatorManager) {
         this.usersService = usersService;
+        this.questionValidatorManager = questionValidatorManager;
     }
 
     @Override
@@ -159,5 +163,19 @@ public class QuestionsServiceImpl extends ServiceImpl<QuestionsMapper, Questions
                 page.getPageNumber(),
                 page.getPageSize()
         );
+    }
+
+    @Override
+    public boolean validate(QuestionValidationDto validationDto) {
+        QueryWrapper queryWrapper = QueryWrapper.create().eq(Questions::getId, validationDto.getQuestionId());
+        if (!this.exists(queryWrapper)) {
+            throw new ServiceException(GlobalError.QUESTION_NOT_FOUND);
+        }
+        Questions questions = this.getOne(queryWrapper);
+        Integer type = questions.getType();
+        if (!questionValidatorManager.supports(type)) {
+            throw new ServiceException(GlobalError.QUESTION_TYPE_NOT_SUPPORTED);
+        }
+        return questionValidatorManager.getValidator(type).validate(questions, validationDto.getAnswer());
     }
 }

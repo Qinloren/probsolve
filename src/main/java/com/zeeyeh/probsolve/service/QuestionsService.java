@@ -4,6 +4,7 @@ import com.mybatisflex.core.service.IService;
 import com.zeeyeh.probsolve.dto.question.QuestionCreateDto;
 import com.zeeyeh.probsolve.dto.question.QuestionSearchDto;
 import com.zeeyeh.probsolve.dto.question.QuestionUpdateDto;
+import com.zeeyeh.probsolve.dto.question.QuestionValidationDto;
 import com.zeeyeh.probsolve.entity.data.Questions;
 import com.zeeyeh.probsolve.vo.basic.QuestionVo;
 import com.zeeyeh.probsolve.vo.search.QuestionSearchVo;
@@ -51,4 +52,11 @@ public interface QuestionsService extends IService<Questions> {
      * @return 搜索结果
      */
     QuestionSearchVo search(QuestionSearchDto searchDto);
+
+    /**
+     * 验证答案
+     * @param validationDto 验证参数
+     * @return 验证结果
+     */
+    boolean validate(QuestionValidationDto validationDto);
 }
