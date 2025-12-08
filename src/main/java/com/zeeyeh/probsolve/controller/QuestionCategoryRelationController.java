@@ -1,11 +1,14 @@
 package com.zeeyeh.probsolve.controller;
 
 import com.zeeyeh.probsolve.dto.question.relation.RelationCreateDto;
+import com.zeeyeh.probsolve.dto.question.relation.RelationSearchByQuestionDto;
 import com.zeeyeh.probsolve.dto.question.relation.RelationSearchDto;
 import com.zeeyeh.probsolve.dto.question.relation.RelationUpdateDto;
 import com.zeeyeh.probsolve.service.QuestionCategoryRelationService;
 import com.zeeyeh.probsolve.vo.basic.QuestionCategoryRelationVo;
+import com.zeeyeh.probsolve.vo.basic.QuestionByRelationVo;
 import com.zeeyeh.probsolve.vo.search.QuestionCategoryRelationSearchVo;
+import com.zeeyeh.probsolve.vo.search.QuestionSearchByRelationVo;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -70,5 +73,16 @@ public class QuestionCategoryRelationController {
     @ResponseBody
     public QuestionCategoryRelationSearchVo search(RelationSearchDto searchDto) {
         return questionCategoryRelationService.search(searchDto);
+    }
+
+    /**
+     * 搜索题目
+     * @param searchByQuestionDto 搜索条件
+     * @return 搜索结果
+     */
+    @GetMapping("searchByQuestion")
+    @ResponseBody
+    public QuestionSearchByRelationVo searchByQuestion(RelationSearchByQuestionDto searchByQuestionDto) {
+        return questionCategoryRelationService.searchByQuestion(searchByQuestionDto);
     }
 }

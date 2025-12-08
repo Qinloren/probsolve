@@ -22,8 +22,8 @@ public class GlobalExceptionHandler {
     @Resource
     LangProvider langProvider;
 
-    @ExceptionHandler
-    private R<?> handlerServiceException(ServiceException e) {
+    @ExceptionHandler(ServiceException.class)
+    public R<?> handlerServiceException(ServiceException e) {
         return R.any(e.getCode(), langProvider.translate(e.getMessage()));
     }
 

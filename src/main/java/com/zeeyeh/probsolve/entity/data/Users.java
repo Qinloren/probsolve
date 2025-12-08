@@ -1,5 +1,6 @@
 package com.zeeyeh.probsolve.entity.data;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_users")
+@Table("pb_user")
 public class Users implements Serializable, UserDetails {
 
     @Serial
@@ -69,6 +70,7 @@ public class Users implements Serializable, UserDetails {
     /**
      * 总积分
      */
+    @Column(value = "total_score")
     private Integer totalScore;
 
     /**
@@ -79,31 +81,37 @@ public class Users implements Serializable, UserDetails {
     /**
      * 注册时间
      */
+    @Column(value = "create_time")
     private LocalDateTime createTime;
 
     /**
      * 最后更新时间
      */
+    @Column(value = "update_time")
     private LocalDateTime updateTime;
 
     /**
      * 最后登录时间
      */
+    @Column(value = "last_login_time")
     private LocalDateTime lastLoginTime;
 
     /**
      * 总答题次数
      */
+    @Column(value = "total_attempts")
     private Integer totalAttempts;
 
     /**
      * 正确率
      */
+    @Column(value = "correct_rate")
     private BigDecimal correctRate;
 
     /**
-     * 总答题次数
+     * 总考试次数
      */
+    @Column(value = "total_exams")
     private Integer totalExams;
 
     public Long getId() {

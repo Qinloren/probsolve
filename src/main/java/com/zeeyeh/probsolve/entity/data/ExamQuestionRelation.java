@@ -1,5 +1,6 @@
 package com.zeeyeh.probsolve.entity.data;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 
@@ -13,7 +14,7 @@ import java.io.Serializable;
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_exam_question_relation")
+//@Table("pb_exam_question_relation")
 public class ExamQuestionRelation implements Serializable {
 
     @Serial
@@ -28,11 +29,13 @@ public class ExamQuestionRelation implements Serializable {
     /**
      * 考试Id
      */
+    @Column("exam_id")
     private Long examId;
 
     /**
      * 题目Id
      */
+    @Column(value = "question_id")
     private Long questionId;
 
     /**

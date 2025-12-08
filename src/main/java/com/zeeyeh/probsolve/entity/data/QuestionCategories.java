@@ -1,5 +1,6 @@
 package com.zeeyeh.probsolve.entity.data;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -16,7 +17,7 @@ import java.time.ZoneId;
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_question_categories")
+@Table("pb_question_category")
 public class QuestionCategories implements Serializable {
 
     @Serial
@@ -36,6 +37,7 @@ public class QuestionCategories implements Serializable {
     /**
      * 创建者用户Id
      */
+    @Column(value = "user_id")
     private long userId;
 
     /**
@@ -51,11 +53,13 @@ public class QuestionCategories implements Serializable {
     /**
      * 创建时间
      */
+    @Column(value = "create_time")
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
+    @Column(value = "update_time")
     private LocalDateTime updateTime;
 
     public Long getId() {

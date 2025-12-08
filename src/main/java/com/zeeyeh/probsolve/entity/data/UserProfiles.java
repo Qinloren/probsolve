@@ -1,5 +1,6 @@
 package com.zeeyeh.probsolve.entity.data;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_user_profiles")
+//@Table("pb_user_profiles")
 public class UserProfiles implements Serializable {
 
     @Serial
@@ -30,11 +31,13 @@ public class UserProfiles implements Serializable {
     /**
      * 用户Id
      */
+    @Column(value = "user_id")
     private Long userId;
 
     /**
      * 真实姓名
      */
+    @Column(value = "realName")
     private String realName;
 
     /**
@@ -45,7 +48,7 @@ public class UserProfiles implements Serializable {
     /**
      * 学校
      */
-    private String scholl;
+    private String school;
 
     /**
      * 年级
@@ -65,6 +68,7 @@ public class UserProfiles implements Serializable {
     /**
      * 最后更新时间
      */
+    @Column(value = "update_time")
     private LocalDateTime updateTime;
 
     public Long getId() {
@@ -99,12 +103,12 @@ public class UserProfiles implements Serializable {
         this.phone = phone;
     }
 
-    public String getScholl() {
-        return scholl;
+    public String getSchool() {
+        return school;
     }
 
-    public void setScholl(String scholl) {
-        this.scholl = scholl;
+    public void setSchool(String school) {
+        this.school = school;
     }
 
     public String getGrade() {

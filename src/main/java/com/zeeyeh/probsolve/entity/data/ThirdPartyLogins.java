@@ -1,5 +1,6 @@
 package com.zeeyeh.probsolve.entity.data;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_third_party_logins")
+//@Table("pb_third_party_logins")
 public class ThirdPartyLogins implements Serializable {
 
     @Serial
@@ -30,6 +31,7 @@ public class ThirdPartyLogins implements Serializable {
     /**
      * 用户Id
      */
+    @Column(value = "user_id")
     private Long userId;
 
     /**
@@ -40,11 +42,13 @@ public class ThirdPartyLogins implements Serializable {
     /**
      * 第三方平台用户标识
      */
+    @Column(value = "open_id")
     private String openId;
 
     /**
      * 绑定时间
      */
+    @Column(value = "create_time")
     private LocalDateTime createTime;
 
     public Long getId() {

@@ -38,7 +38,8 @@ public class UploadController {
             throw new ServiceException(GlobalError.FORMAT_HANDLER_NOT_FOUND);
         }
         File questionTaskFolder = fileHandlerFactory.getQuestionTaskFolder();
-        String filename = importDto.getFile().getOriginalFilename();
+        MultipartFile file = importDto.getFile();
+        String filename = file.getOriginalFilename();
         String targetFilename = UUID.randomUUID().toString().replace("-", "");
         String extName = ".pb";
         if (filename != null) {
@@ -56,6 +57,7 @@ public class UploadController {
             byte[] bytes = Files.readAllBytes(targetFile.toPath());
             handler.handler(bytes, userId);
         } catch (IOException e) {
+            e.fillInStackTrace();
             throw new ServiceException(GlobalError.QUESTION_IMPORT_FAILED);
         }
     }

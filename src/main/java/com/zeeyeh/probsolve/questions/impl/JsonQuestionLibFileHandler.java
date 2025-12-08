@@ -6,12 +6,14 @@ import com.alibaba.fastjson2.JSONObject;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.zeeyeh.probsolve.entity.data.QuestionAnswers;
 import com.zeeyeh.probsolve.entity.data.QuestionCategories;
+import com.zeeyeh.probsolve.entity.data.QuestionCategoryRelation;
 import com.zeeyeh.probsolve.entity.data.Questions;
 import com.zeeyeh.probsolve.exceptions.GlobalError;
 import com.zeeyeh.probsolve.exceptions.ServiceException;
 import com.zeeyeh.probsolve.questions.QuestionLibFileHandler;
 import com.zeeyeh.probsolve.service.QuestionAnswersService;
 import com.zeeyeh.probsolve.service.QuestionCategoriesService;
+import com.zeeyeh.probsolve.service.QuestionCategoryRelationService;
 import com.zeeyeh.probsolve.service.QuestionsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +32,13 @@ public class JsonQuestionLibFileHandler implements QuestionLibFileHandler {
     private final QuestionsService questionsService;
     private final QuestionAnswersService questionAnswersService;
     private final QuestionCategoriesService questionCategoriesService;
+    private final QuestionCategoryRelationService  questionCategoryRelationService;
 
-    public JsonQuestionLibFileHandler(QuestionsService questionsService, QuestionAnswersService questionAnswersService, QuestionCategoriesService questionCategoriesService) {
+    public JsonQuestionLibFileHandler(QuestionsService questionsService, QuestionAnswersService questionAnswersService, QuestionCategoriesService questionCategoriesService, QuestionCategoryRelationService  questionCategoryRelationService) {
         this.questionsService = questionsService;
         this.questionAnswersService = questionAnswersService;
         this.questionCategoriesService = questionCategoriesService;
+        this.questionCategoryRelationService = questionCategoryRelationService;
     }
 
     @Override
@@ -46,6 +50,7 @@ public class JsonQuestionLibFileHandler implements QuestionLibFileHandler {
             QueryWrapper queryWrapper = QueryWrapper.create().eq(QuestionCategories::getName, libName);
             QuestionCategories questionCategories = new QuestionCategories();
             questionCategories.setName(libName);
+            questionCategories.setUserId(uid);
             questionCategories.setStatus(1);
             questionCategories.setCreateTime(LocalDateTime.now());
             questionCategories.setUpdateTime(LocalDateTime.now());
@@ -57,19 +62,21 @@ public class JsonQuestionLibFileHandler implements QuestionLibFileHandler {
                 log.error("保存题库失败: {}", libName);
                 throw new ServiceException(GlobalError.QUESTION_CATEGORY_CREATE_FAILED);
             }
+            QuestionCategories saveCategory = questionCategoriesService.getOne(queryWrapper);
+            Long categoryId = saveCategory.getId();
             for (Object questionObject : questions) {
                 JSONObject question = (JSONObject) questionObject;
                 QuestionDescription questionDescription = this.handlerQuestion(question, uid);
-                this.saveQuestionAndAnswer(questionDescription.getQuestions(), questionDescription.getQuestionAnswers());
+                this.saveQuestionAndAnswer(questionDescription.getQuestions(), questionDescription.getQuestionAnswers(), categoryId);
             }
             log.info("保存题库成功: {}", libName);
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException(e);
         }
         return true;
     }
 
-    private void saveQuestionAndAnswer(Questions questions, QuestionAnswers questionAnswers) {
+    private void saveQuestionAndAnswer(Questions questions, QuestionAnswers questionAnswers, Long categoryId) {
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .eq(Questions::getContent, questions.getContent())
                 .eq(Questions::getType, questions.getType());
@@ -89,6 +96,19 @@ public class JsonQuestionLibFileHandler implements QuestionLibFileHandler {
         }
         if (!questionAnswersService.save(questionAnswers)) {
             log.error("保存答案失败: {}", questionAnswers);
+            return;
+        }
+        QuestionCategoryRelation relation = new QuestionCategoryRelation();
+        relation.setQuestionsId(questionId);
+        relation.setCategoryId(categoryId);
+        QueryWrapper relationQueryWrapper = QueryWrapper.create()
+                .eq(QuestionCategoryRelation::getQuestionsId, questionId)
+                .eq(QuestionCategoryRelation::getCategoryId, categoryId);
+        if (questionCategoryRelationService.exists(relationQueryWrapper)) {
+            throw new ServiceException(GlobalError.QUESTION_CATEGORY_RELATION_ALREADY_FOUND);
+        }
+        if (!questionCategoryRelationService.save(relation)) {
+            log.error("保存题目分类关联失败: questionId={}, categoryId={}", questionId, categoryId);
             return;
         }
         log.info("保存题目成功: {}", questions);

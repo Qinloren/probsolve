@@ -1,8 +1,10 @@
 package com.zeeyeh.probsolve.entity.data;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
+import org.apache.commons.lang3.builder.DiffExclude;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,7 +19,7 @@ import java.time.ZoneId;
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_announcements")
+@Table("pb_announcement")
 public class Announcements implements Serializable {
 
     @Serial
@@ -42,6 +44,7 @@ public class Announcements implements Serializable {
     /**
      * 是否置顶
      */
+    @Column(value = "is_top")
     private Integer isTop;
 
     /**
@@ -52,16 +55,19 @@ public class Announcements implements Serializable {
     /**
      * 创建者Id
      */
+    @Column(value = "user_id")
     private Long userId;
 
     /**
      * 创建时间
      */
+    @Column(value = "create_time")
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
+    @Column(value = "update_time")
     private LocalDateTime updateTime;
 
     public Long getId() {

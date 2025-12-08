@@ -3,6 +3,7 @@ package com.zeeyeh.probsolve.controller;
 import com.zeeyeh.probsolve.dto.question.QuestionCreateDto;
 import com.zeeyeh.probsolve.dto.question.QuestionSearchDto;
 import com.zeeyeh.probsolve.dto.question.QuestionUpdateDto;
+import com.zeeyeh.probsolve.dto.question.QuestionValidationDto;
 import com.zeeyeh.probsolve.service.QuestionsService;
 import com.zeeyeh.probsolve.vo.basic.QuestionVo;
 import com.zeeyeh.probsolve.vo.search.QuestionSearchVo;
@@ -73,5 +74,14 @@ public class QuestionController {
     @ResponseBody
     public QuestionSearchVo search(QuestionSearchDto searchDto) {
         return questionsService.search(searchDto);
+    }
+
+    /**
+     * 验证答案
+     */
+    @PostMapping("validate")
+    @ResponseBody
+    public boolean validate(@RequestBody QuestionValidationDto validationDto) {
+        return questionsService.validate(validationDto);
     }
 }

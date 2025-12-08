@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_error_books")
+//@Table("pb_error_books")
 public class ErrorBooks implements Serializable {
 
     @Serial

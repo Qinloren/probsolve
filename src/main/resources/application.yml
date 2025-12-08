@@ -5,16 +5,16 @@ spring:
     name: probsolve
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/probsolve?serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://47.108.157.243:3306/probsolve?serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
     username: probsolve
-    password: probsolve123..
+    password: RSnaN6D2acS5DENd
     type: com.alibaba.druid.pool.DruidDataSource
   data:
     redis:
-      host: localhost
+      host: 47.108.157.243
       port: 6379
       database: 0
-      password: ''
+      password: 3c564cbdf7415728
       timeout: 10000ms
       lettuce:
         pool:

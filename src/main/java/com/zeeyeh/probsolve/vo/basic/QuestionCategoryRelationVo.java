@@ -15,7 +15,7 @@ public class QuestionCategoryRelationVo {
     /**
      * 题目Id
      */
-    private Long questionsId;
+    private Long questionId;
 
     /**
      * 分类Id
@@ -34,7 +34,7 @@ public class QuestionCategoryRelationVo {
 
     public QuestionCategoryRelationVo(Long id, Long questionsId, Long categoryId) {
         this.id = id;
-        this.questionsId = questionsId;
+        this.questionId = questionsId;
         this.categoryId = categoryId;
     }
 
@@ -48,11 +48,11 @@ public class QuestionCategoryRelationVo {
     }
 
     public Long getQuestionsId() {
-        return questionsId;
+        return questionId;
     }
 
     public QuestionCategoryRelationVo setQuestionsId(Long questionsId) {
-        this.questionsId = questionsId;
+        this.questionId = questionsId;
         return this;
     }
 

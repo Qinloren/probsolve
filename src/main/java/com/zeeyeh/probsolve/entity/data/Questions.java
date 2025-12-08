@@ -1,5 +1,6 @@
 package com.zeeyeh.probsolve.entity.data;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -17,11 +18,18 @@ import java.time.ZoneId;
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_questions")
+@Table("pb_question")
 public class Questions implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
+
+    public static final Integer SINGLE_CHOICE = 1;
+    public static final Integer MULTIPLE_CHOICE = 2;
+    public static final Integer TRUE_OR_FALSE = 3;
+    public static final Integer FILL = 4;
+    public static final Integer SHORT_ANSWER = 5;
+
 
     /**
      * 题目Id
@@ -67,16 +75,19 @@ public class Questions implements Serializable {
     /**
      * 创建者用户Id
      */
+    @Column(value = "user_id")
     private Long userId;
 
     /**
      * 创建时间
      */
+    @Column(value = "create_time")
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
+    @Column(value = "update_time")
     private LocalDateTime updateTime;
 
     public Long getId() {
@@ -183,4 +194,20 @@ public class Questions implements Serializable {
         this.updateTime = updateTimestamp != null ? LocalDateTime.ofInstant(java.time.Instant.ofEpochMilli(updateTimestamp), ZoneId.systemDefault()) : null;
     }
 
+    @Override
+    public String toString() {
+        return "Questions{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", type=" + type +
+                ", difficulty=" + difficulty +
+                ", score=" + score +
+                ", analysis='" + analysis + '\'' +
+                ", source='" + source + '\'' +
+                ", status=" + status +
+                ", userId=" + userId +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

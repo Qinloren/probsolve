@@ -1,5 +1,6 @@
 package com.zeeyeh.probsolve.entity.data;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -30,41 +31,49 @@ public class UserQuestionRecords implements Serializable {
     /**
      * 用户Id
      */
+    @Column(value = "user_id")
     private Long userId;
 
     /**
      * 题目Id
      */
+    @Column(value = "question_id")
     private Long questionId;
 
     /**
      * 所属练习Id
      */
+    @Column(value = "practice_id")
     private Long practiceId;
 
     /**
      * 所属考试Id
      */
+    @Column(value = "exam_id")
     private Long examId;
 
     /**
      * 用户答案
      */
+    @Column(value = "user_answer")
     private String userAnswer;
 
     /**
      * 是否正确
      */
+    @Column(value = "is_correct")
     private Integer isCorrect;
 
     /**
      * 答题时间
      */
+    @Column(value = "answer_time")
     private LocalDateTime answerTime;
 
     /**
      * 用时(单位: 秒)
      */
+    @Column(value = "spend_seconds")
     private Integer spendSeconds;
 
     /**

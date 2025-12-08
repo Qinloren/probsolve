@@ -2,11 +2,14 @@ package com.zeeyeh.probsolve.service;
 
 import com.mybatisflex.core.service.IService;
 import com.zeeyeh.probsolve.dto.question.relation.RelationCreateDto;
+import com.zeeyeh.probsolve.dto.question.relation.RelationSearchByQuestionDto;
 import com.zeeyeh.probsolve.dto.question.relation.RelationSearchDto;
 import com.zeeyeh.probsolve.dto.question.relation.RelationUpdateDto;
 import com.zeeyeh.probsolve.entity.data.QuestionCategoryRelation;
 import com.zeeyeh.probsolve.vo.basic.QuestionCategoryRelationVo;
+import com.zeeyeh.probsolve.vo.basic.QuestionByRelationVo;
 import com.zeeyeh.probsolve.vo.search.QuestionCategoryRelationSearchVo;
+import com.zeeyeh.probsolve.vo.search.QuestionSearchByRelationVo;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -50,4 +53,11 @@ public interface QuestionCategoryRelationService extends IService<QuestionCatego
      * @return 搜索结果
      */
     QuestionCategoryRelationSearchVo search(RelationSearchDto searchDto);
+
+    /**
+     * 通过题目Id搜索题目-分类关联关系
+     * @param searchByQuestionDto 搜索参数
+     * @return 搜索结果
+     */
+    QuestionSearchByRelationVo searchByQuestion(RelationSearchByQuestionDto searchByQuestionDto);
 }

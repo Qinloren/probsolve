@@ -1,5 +1,6 @@
 package com.zeeyeh.probsolve.entity.data;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -15,7 +16,7 @@ import java.sql.Date;
  * @author Qinloren
  * @since 1.0.0
  */
-@Table("pb_user_learning_stat")
+//@Table("pb_user_learning_stat")
 public class UserLearningStat implements Serializable {
 
     @Serial
@@ -30,31 +31,37 @@ public class UserLearningStat implements Serializable {
     /**
      * 用户Id
      */
+    @Column(value = "user_id")
     private Long userId;
 
     /**
      * 统计日期
      */
+    @Column(value = "start_date")
     private Date statDate;
 
     /**
      * 当日做题总数
      */
+    @Column(value = "total_questions")
     private Integer totalQuestions;
 
     /**
      * 当日作对题数
      */
+    @Column(value = "correct_count")
     private Integer correctCount;
 
     /**
      * 当日参加考试次数
      */
+    @Column(value = "exam_count")
     private Integer examCount;
 
     /**
      * 当日学习时长
      */
+    @Column(value = "study_minutes")
     private Integer studyMinutes;
 
     public Long getId() {

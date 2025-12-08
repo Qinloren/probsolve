@@ -1,5 +1,6 @@
 package com.zeeyeh.probsolve.entity.data;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -29,11 +30,13 @@ public class QuestionCategoryRelation implements Serializable {
     /**
      * 题目Id
      */
+    @Column(value = "question_id")
     private Long questionsId;
 
     /**
      * 分类Id
      */
+    @Column(value = "category_id")
     private Long categoryId;
 
     public Long getId() {
