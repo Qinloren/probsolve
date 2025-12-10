@@ -33,6 +33,16 @@ public class QuestionCategoryVo {
     private Integer status;
 
     /**
+     * 题目数量
+     */
+    private Integer size;
+
+    /**
+     * 题库简介
+     */
+    private String signature;
+
+    /**
      * 创建时间
      */
     private Long createTime;
@@ -52,15 +62,20 @@ public class QuestionCategoryVo {
                 .setUserId(questionCategories.getUserId())
                 .setSort(questionCategories.getSort())
                 .setStatus(questionCategories.getStatus())
+                .setSize(questionCategories.getSize())
+                .setSignature(questionCategories.getSignature())
                 .setCreateTime(questionCategories.getCreateTimestamp())
                 .setUpdateTime(questionCategories.getUpdateTimestamp());
     }
 
-    public QuestionCategoryVo(Long id, String name, Integer sort, Integer status, Long createTime, Long updateTime) {
+    public QuestionCategoryVo(Long id, Long userId, String name, Integer sort, Integer status, Integer size, String signature, Long createTime, Long updateTime) {
         this.id = id;
+        this.userId = userId;
         this.name = name;
         this.sort = sort;
         this.status = status;
+        this.size = size;
+        this.signature = signature;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -107,6 +122,24 @@ public class QuestionCategoryVo {
 
     public QuestionCategoryVo setStatus(Integer status) {
         this.status = status;
+        return this;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public QuestionCategoryVo setSize(Integer size) {
+        this.size = size;
+        return this;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public QuestionCategoryVo setSignature(String signature) {
+        this.signature = signature;
         return this;
     }
 

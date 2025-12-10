@@ -26,7 +26,10 @@ public class MultipleChoiceQuestionValidator implements QuestionValidator {
 
     @Override
     public boolean validate(Questions questions, Object answer) {
-        List<String> answers = (ArrayList) answer;
+        if (!(answer instanceof List<?>)) {
+            return false;
+        }
+        List<String> answers = (List<String>) answer;
         Long id = questions.getId();
         QuestionAnswerVo questionAnswerVo = questionAnswersService.detail(id);
         String saveAnswers = questionAnswerVo.getAnswers();

@@ -142,6 +142,39 @@ public class QuestionCategoryRelationServiceImpl extends ServiceImpl<QuestionCat
     }
 
     @Override
+    public List<QuestionVo> findByCategoryId(Long categoryId) {
+        // 验证分类是否存在
+        if (!questionCategoriesService.exists(QueryWrapper.create().eq(QuestionCategories::getId, categoryId))) {
+            throw new ServiceException(GlobalError.QUESTION_CATEGORY_NOT_FOUND);
+        }
+
+        // 查询该分类下的所有关联关系
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .where(QuestionCategoryRelation::getCategoryId).eq(categoryId);
+        List<QuestionCategoryRelation> relations = this.list(queryWrapper);
+
+        // 提取题目ID列表
+        List<Long> questionIds = relations.stream()
+                .map(QuestionCategoryRelation::getQuestionsId)
+                .toList();
+
+        // 如果没有关联的题目，返回空列表
+        if (questionIds.isEmpty()) {
+            return List.of();
+        }
+
+        // 根据题目ID查询题目详情
+        QueryWrapper questionQueryWrapper = QueryWrapper.create()
+                .where(Questions::getId).in(questionIds);
+        List<Questions> questions = questionsService.list(questionQueryWrapper);
+
+        // 转换为VO并返回
+        return questions.stream()
+                .map(QuestionVo::of)
+                .toList();
+    }
+
+    @Override
     public QuestionSearchByRelationVo searchByQuestion(RelationSearchByQuestionDto searchByQuestionDto) {
         QueryWrapper relationQueryWrapper = QueryWrapper.create()
                 .eq(QuestionCategoryRelation::getCategoryId, searchByQuestionDto.getCategoryId());

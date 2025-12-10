@@ -46,11 +46,14 @@ public class JsonQuestionLibFileHandler implements QuestionLibFileHandler {
         try {
             JSONObject jsonObject = JSON.parseObject(bytes);
             String libName = jsonObject.getString("lib_name");
+            String signature = jsonObject.getString("signature");
             JSONArray questions = jsonObject.getJSONArray("question");
             QueryWrapper queryWrapper = QueryWrapper.create().eq(QuestionCategories::getName, libName);
             QuestionCategories questionCategories = new QuestionCategories();
             questionCategories.setName(libName);
+            questionCategories.setSignature(signature);
             questionCategories.setUserId(uid);
+            questionCategories.setSize(questions.size());
             questionCategories.setStatus(1);
             questionCategories.setCreateTime(LocalDateTime.now());
             questionCategories.setUpdateTime(LocalDateTime.now());

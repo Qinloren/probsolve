@@ -51,6 +51,16 @@ public class QuestionCategories implements Serializable {
     private Integer status;
 
     /**
+     * 题目数量
+     */
+    private Integer size;
+
+    /**
+     * 题库简介
+     */
+    private String signature;
+
+    /**
      * 创建时间
      */
     @Column(value = "create_time")
@@ -101,6 +111,22 @@ public class QuestionCategories implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 
     public LocalDateTime getCreateTime() {

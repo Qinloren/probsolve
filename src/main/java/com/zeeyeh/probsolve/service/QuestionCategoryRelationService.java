@@ -8,9 +8,12 @@ import com.zeeyeh.probsolve.dto.question.relation.RelationUpdateDto;
 import com.zeeyeh.probsolve.entity.data.QuestionCategoryRelation;
 import com.zeeyeh.probsolve.vo.basic.QuestionCategoryRelationVo;
 import com.zeeyeh.probsolve.vo.basic.QuestionByRelationVo;
+import com.zeeyeh.probsolve.vo.basic.QuestionVo;
 import com.zeeyeh.probsolve.vo.search.QuestionCategoryRelationSearchVo;
 import com.zeeyeh.probsolve.vo.search.QuestionSearchByRelationVo;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 题目-分类关联表 服务层。
@@ -53,6 +56,13 @@ public interface QuestionCategoryRelationService extends IService<QuestionCatego
      * @return 搜索结果
      */
     QuestionCategoryRelationSearchVo search(RelationSearchDto searchDto);
+
+    /**
+     * 通过分类Id搜索题目
+     * @param categoryId 分类Id
+     * @return 搜索结果
+     */
+    List<QuestionVo> findByCategoryId(Long categoryId);
 
     /**
      * 通过题目Id搜索题目-分类关联关系
