@@ -32,6 +32,13 @@ public interface QuestionCategoriesService extends IService<QuestionCategories> 
     QuestionCategoryVo update(QuestionCategoryUpdateDto updateDto);
 
     /**
+     * 更新题目数量
+     * @param categoryId 分类Id
+     * @param size 数量
+     */
+    void updateSize(Long categoryId, int size);
+
+    /**
      * 获取题目分类详情
      * @param id id
      * @return 详情

@@ -5,10 +5,15 @@ import com.zeeyeh.probsolve.dto.question.QuestionCreateDto;
 import com.zeeyeh.probsolve.dto.question.QuestionSearchDto;
 import com.zeeyeh.probsolve.dto.question.QuestionUpdateDto;
 import com.zeeyeh.probsolve.dto.question.QuestionValidationDto;
+import com.zeeyeh.probsolve.entity.ImportRow;
+import com.zeeyeh.probsolve.entity.data.QuestionAnswers;
+import com.zeeyeh.probsolve.entity.data.QuestionCategoryRelation;
 import com.zeeyeh.probsolve.entity.data.Questions;
 import com.zeeyeh.probsolve.vo.basic.QuestionVo;
 import com.zeeyeh.probsolve.vo.search.QuestionSearchVo;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 题目表 服务层。

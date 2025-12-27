@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.zeeyeh</groupId>
     <artifactId>probsolve</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SANPSHOT</version>
     <name>probsolve</name>
     <description>probsolve</description>
     <url/>
@@ -73,6 +73,10 @@
             <version>2.0.57</version>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -104,6 +108,10 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>5.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
     </dependencies>
 

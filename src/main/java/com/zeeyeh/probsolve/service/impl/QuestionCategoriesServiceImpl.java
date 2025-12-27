@@ -73,6 +73,24 @@ public class QuestionCategoriesServiceImpl extends ServiceImpl<QuestionCategorie
     }
 
     @Override
+    public void updateSize(Long categoryId, int size) {
+        if (!this.exists(QueryWrapper.create().eq(QuestionCategories::getId, categoryId))) {
+            throw new ServiceException(GlobalError.QUESTION_CATEGORY_NOT_FOUND);
+        }
+
+        boolean updated = this.updateChain()
+                .set(QuestionCategories::getSize, size)
+                .set(QuestionCategories::getUpdateTime, LocalDateTime.now())
+                .where(QuestionCategories::getId)
+                .eq(categoryId)
+                .update();
+
+        if (!updated) {
+            throw new ServiceException(GlobalError.QUESTION_CATEGORY_UPDATE_FAILED);
+        }
+    }
+
+    @Override
     public QuestionCategoryVo detail(Long id) {
         if (!this.exists(QueryWrapper.create().eq(QuestionCategories::getId, id))) {
             throw new ServiceException(GlobalError.QUESTION_CATEGORY_NOT_FOUND);

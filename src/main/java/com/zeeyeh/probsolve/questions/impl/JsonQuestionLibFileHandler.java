@@ -1,9 +1,13 @@
 package com.zeeyeh.probsolve.questions.impl;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.*;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.TreeNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.zeeyeh.probsolve.entity.ImportRow;
 import com.zeeyeh.probsolve.entity.data.QuestionAnswers;
 import com.zeeyeh.probsolve.entity.data.QuestionCategories;
 import com.zeeyeh.probsolve.entity.data.QuestionCategoryRelation;
@@ -11,16 +15,16 @@ import com.zeeyeh.probsolve.entity.data.Questions;
 import com.zeeyeh.probsolve.exceptions.GlobalError;
 import com.zeeyeh.probsolve.exceptions.ServiceException;
 import com.zeeyeh.probsolve.questions.QuestionLibFileHandler;
-import com.zeeyeh.probsolve.service.QuestionAnswersService;
-import com.zeeyeh.probsolve.service.QuestionCategoriesService;
-import com.zeeyeh.probsolve.service.QuestionCategoryRelationService;
-import com.zeeyeh.probsolve.service.QuestionsService;
+import com.zeeyeh.probsolve.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Json 题库文件处理器
@@ -29,54 +33,140 @@ import java.time.LocalDateTime;
 public class JsonQuestionLibFileHandler implements QuestionLibFileHandler {
 
     private static final Logger log = LoggerFactory.getLogger(JsonQuestionLibFileHandler.class);
+    private static final int BATCH_SIZE = 200;
     private final QuestionsService questionsService;
     private final QuestionAnswersService questionAnswersService;
     private final QuestionCategoriesService questionCategoriesService;
     private final QuestionCategoryRelationService  questionCategoryRelationService;
+    private final QuestionImportTaskService questionImportTaskService;
+    private final QuestionImportService questionImportService;
 
-    public JsonQuestionLibFileHandler(QuestionsService questionsService, QuestionAnswersService questionAnswersService, QuestionCategoriesService questionCategoriesService, QuestionCategoryRelationService  questionCategoryRelationService) {
+    public JsonQuestionLibFileHandler(QuestionsService questionsService, QuestionAnswersService questionAnswersService, QuestionCategoriesService questionCategoriesService, QuestionCategoryRelationService  questionCategoryRelationService, QuestionImportTaskService questionImportTaskService, QuestionImportService questionImportService) {
         this.questionsService = questionsService;
         this.questionAnswersService = questionAnswersService;
         this.questionCategoriesService = questionCategoriesService;
         this.questionCategoryRelationService = questionCategoryRelationService;
+        this.questionImportTaskService = questionImportTaskService;
+        this.questionImportService = questionImportService;
     }
 
     @Override
-    public boolean handler(byte[] bytes, Long uid) {
-        try {
-            JSONObject jsonObject = JSON.parseObject(bytes);
-            String libName = jsonObject.getString("lib_name");
-            String signature = jsonObject.getString("signature");
-            JSONArray questions = jsonObject.getJSONArray("question");
-            QueryWrapper queryWrapper = QueryWrapper.create().eq(QuestionCategories::getName, libName);
+    public boolean handler(InputStream inputStream, String taskId, Long uid) {
+        JsonFactory factory = new JsonFactory();
+        try (JsonParser parser = factory.createParser(inputStream)) {
+            Long categoryId;
+            String libName = null;
+            String signature = null;
+            if (parser.nextToken() != JsonToken.START_OBJECT) {
+                throw new ServiceException(GlobalError.QUESTION_IMPORT_FAILED);
+            }
+            while (parser.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = parser.getText();
+                JsonToken valueToken = parser.nextToken();
+                switch (fieldName) {
+                    case "lib_name":
+                        libName = parser.getValueAsString();
+                        break;
+                    case "signature":
+                        signature = parser.getValueAsString();
+                        break;
+                    case "questions":
+                        categoryId = createCategoryOnce(taskId, libName, signature, uid);
+
+                        if (valueToken != JsonToken.START_ARRAY) {
+                            throw new ServiceException(GlobalError.QUESTION_IMPORT_FAILED);
+                        }
+                        streamReadQuestion(parser, categoryId, uid, taskId);
+                        break;
+                    default:
+                        parser.skipChildren();
+                }
+            }
+
+            log.info("题库导入完成 taskId: {}", taskId);
+            return true;
+        } catch (Exception e) {
+            log.error("解析题库文件失败: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void streamReadQuestion(JsonParser parser, Long categoryId, Long uid, String taskId) throws IOException {
+        List<ImportRow> list = new ArrayList<>(BATCH_SIZE);
+        int total = 0;
+        int success = 0;
+        int error = 0;
+
+        while (parser.nextToken() != JsonToken.END_ARRAY) {
+            if (parser.currentToken() != JsonToken.START_OBJECT) {
+                parser.skipChildren();
+                continue;
+            }
+            total++;
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                TreeNode treeNode = objectMapper.readTree(parser);
+                JSONObject questionJson = JSON.parseObject(treeNode.toString());
+                // JSONObject questionJson = JSON.parseObject(parser.readValueAsTree().toString());
+                QuestionDescription desc = handlerQuestion(questionJson, uid);
+                ImportRow importRow = new ImportRow();
+                importRow.setQuestions(desc.getQuestions());
+                importRow.setQuestionAnswers(desc.getQuestionAnswers());
+                list.add(importRow);
+                if (list.size() >= BATCH_SIZE) {
+                    // questionsService.sa(list, categoryId);
+                    questionImportService.saveBatch(list, categoryId);
+                    success += list.size();
+                    questionImportTaskService.incrementSuccess(taskId, list.size());
+                    list.clear();
+                }
+            } catch (Exception e) {
+                error++;
+                log.error("题目导入失败， taskId={}", taskId, e);
+            }
+        }
+        if (!list.isEmpty()) {
+            try {
+                questionImportService.saveBatch(list, categoryId);
+                success += list.size();
+                questionImportTaskService.incrementSuccess(taskId, list.size());
+            } catch (Exception e) {
+                error += list.size();
+                log.error("题目导入失败， taskId={}", taskId, e);
+            }
+        }
+        if (error > 0) {
+            questionImportTaskService.incrementError(taskId, error);
+        }
+        if (success > 0) {
+            questionImportTaskService.incrementSuccess(taskId, success);
+        }
+        questionImportTaskService.updateTotal(taskId, total);
+        questionCategoriesService.updateSize(categoryId, total);
+    }
+
+    private Long createCategoryOnce(String taskId, String libName, String signature, Long uid) {
+            QueryWrapper queryWrapper = QueryWrapper.create()
+                    .eq(QuestionCategories::getName, libName)
+                    .eq(QuestionCategories::getUserId, uid);
+
+            if (questionCategoriesService.exists(queryWrapper)) {
+                throw new ServiceException(GlobalError.QUESTION_CATEGORY_ALREADY_FOUND);
+            }
+
             QuestionCategories questionCategories = new QuestionCategories();
             questionCategories.setName(libName);
             questionCategories.setSignature(signature);
             questionCategories.setUserId(uid);
-            questionCategories.setSize(questions.size());
             questionCategories.setStatus(1);
+            questionCategories.setTaskId(taskId);
             questionCategories.setCreateTime(LocalDateTime.now());
             questionCategories.setUpdateTime(LocalDateTime.now());
-            if (questionCategoriesService.exists(queryWrapper)) {
-                log.warn("题库已存在: {}", libName);
-                throw new ServiceException(GlobalError.QUESTION_CATEGORY_ALREADY_FOUND);
-            }
+
             if (!questionCategoriesService.save(questionCategories)) {
-                log.error("保存题库失败: {}", libName);
                 throw new ServiceException(GlobalError.QUESTION_CATEGORY_CREATE_FAILED);
             }
-            QuestionCategories saveCategory = questionCategoriesService.getOne(queryWrapper);
-            Long categoryId = saveCategory.getId();
-            for (Object questionObject : questions) {
-                JSONObject question = (JSONObject) questionObject;
-                QuestionDescription questionDescription = this.handlerQuestion(question, uid);
-                this.saveQuestionAndAnswer(questionDescription.getQuestions(), questionDescription.getQuestionAnswers(), categoryId);
-            }
-            log.info("保存题库成功: {}", libName);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return true;
+            return questionCategories.getId();
     }
 
     private void saveQuestionAndAnswer(Questions questions, QuestionAnswers questionAnswers, Long categoryId) {
@@ -206,6 +296,6 @@ public class JsonQuestionLibFileHandler implements QuestionLibFileHandler {
 
     @Override
     public String getType() {
-        return "json";
+        return "pb";
     }
 }

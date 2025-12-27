@@ -1,13 +1,21 @@
 package com.zeeyeh.probsolve.questions;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.zeeyeh.probsolve.entity.data.QuestionImportTask;
 import com.zeeyeh.probsolve.exceptions.GlobalError;
 import com.zeeyeh.probsolve.exceptions.ServiceException;
+import com.zeeyeh.probsolve.service.QuestionImportTaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,19 +26,36 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class FileHandlerFactory {
 
+    private final QuestionImportTaskService questionImportTaskService;
     @Value("${app.upload.path}")
     private String uploadPath;
 
     private static final Logger log = LoggerFactory.getLogger(FileHandlerFactory.class);
     private final Map<String, QuestionLibFileHandler> handlers;
 
-    public FileHandlerFactory(Set<QuestionLibFileHandler> handlers) {
+    public FileHandlerFactory(Set<QuestionLibFileHandler> handlers, QuestionImportTaskService questionImportTaskService) {
         this.handlers = new ConcurrentHashMap<>();
         for (QuestionLibFileHandler handler : handlers) {
             log.info("已注册文件处理器: {}", handler.getType());
             this.handlers.put(handler.getType(), handler);
         }
         log.info("文件处理器已注册完成，共计 {} 个", handlers.size());
+        this.questionImportTaskService = questionImportTaskService;
+    }
+
+    @Async("questionImportExecutor")
+    public void importQuestions(String taskId, File file, String type, Long userId) {
+        log.info("开始导入题库， taskId={}, threadName={}", taskId, Thread.currentThread().getName());
+        try (InputStream inputStream = new FileInputStream(file)) {
+            questionImportTaskService.createTask(taskId, userId);
+            questionImportTaskService.updateStatus(taskId, QuestionImportTask.RUNNING);
+            QuestionLibFileHandler handler = this.getHandler(type);
+            handler.handler(inputStream, taskId, userId);
+            questionImportTaskService.finish(taskId);
+        } catch (Exception e) {
+            questionImportTaskService.error(taskId, e.getMessage());
+            log.error("题库导入失败， taskId={}", taskId, e);
+        }
     }
 
     /**

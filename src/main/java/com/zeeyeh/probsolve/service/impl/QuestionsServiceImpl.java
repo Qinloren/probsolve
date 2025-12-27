@@ -8,19 +8,26 @@ import com.zeeyeh.probsolve.dto.question.QuestionCreateDto;
 import com.zeeyeh.probsolve.dto.question.QuestionSearchDto;
 import com.zeeyeh.probsolve.dto.question.QuestionUpdateDto;
 import com.zeeyeh.probsolve.dto.question.QuestionValidationDto;
+import com.zeeyeh.probsolve.entity.ImportRow;
+import com.zeeyeh.probsolve.entity.data.QuestionAnswers;
+import com.zeeyeh.probsolve.entity.data.QuestionCategoryRelation;
 import com.zeeyeh.probsolve.entity.data.Questions;
 import com.zeeyeh.probsolve.entity.data.Users;
 import com.zeeyeh.probsolve.exceptions.GlobalError;
 import com.zeeyeh.probsolve.exceptions.ServiceException;
 import com.zeeyeh.probsolve.mapper.QuestionsMapper;
 import com.zeeyeh.probsolve.questions.QuestionValidatorManager;
+import com.zeeyeh.probsolve.service.QuestionAnswersService;
+import com.zeeyeh.probsolve.service.QuestionCategoryRelationService;
 import com.zeeyeh.probsolve.service.QuestionsService;
 import com.zeeyeh.probsolve.service.UsersService;
 import com.zeeyeh.probsolve.vo.basic.QuestionVo;
 import com.zeeyeh.probsolve.vo.search.QuestionSearchVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +38,7 @@ import java.util.Optional;
  * @since 1.0.0
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class QuestionsServiceImpl extends ServiceImpl<QuestionsMapper, Questions>  implements QuestionsService {
 
     private final UsersService usersService;

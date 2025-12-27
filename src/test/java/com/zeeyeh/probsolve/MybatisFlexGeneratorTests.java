@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class MybatisFlexGeneratorTests {
 
-    @Test
     void generate() {
         try (DruidDataSource dataSource = new DruidDataSource()) {
             dataSource.setUrl("jdbc:mysql://localhost:3306/probsolve?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true&allowPublicKeyRetrieval=true&useSSL=false&allowLoadLocalInfile=true");

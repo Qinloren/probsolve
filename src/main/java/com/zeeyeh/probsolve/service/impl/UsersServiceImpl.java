@@ -189,6 +189,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>  implement
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.hasText(header)) {
             boolean verified = tokenProvider.verifyToken(header);
+            if (!verified) {
+                throw new ServiceException(GlobalError.UNAUTHORIZED);
+            }
             Long id = tokenProvider.getClaim(header, "id").asLong();
             if (!redisProvider.has("token:user:" + id)) {
                 throw new ServiceException(GlobalError.UNAUTHORIZED);

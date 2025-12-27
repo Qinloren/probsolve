@@ -61,6 +61,11 @@ public class QuestionCategories implements Serializable {
     private String signature;
 
     /**
+     * 任务Id
+     */
+    private String taskId;
+
+    /**
      * 创建时间
      */
     @Column(value = "create_time")
@@ -127,6 +132,14 @@ public class QuestionCategories implements Serializable {
 
     public void setSignature(String signature) {
         this.signature = signature;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
     public LocalDateTime getCreateTime() {

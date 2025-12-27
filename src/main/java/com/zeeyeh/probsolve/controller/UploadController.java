@@ -5,7 +5,9 @@ import com.alibaba.fastjson2.JSONObject;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.zeeyeh.probsolve.dto.question.QuestionLibDeriveDto;
 import com.zeeyeh.probsolve.dto.upload.UploadQuestionImportDto;
+import com.zeeyeh.probsolve.entity.R;
 import com.zeeyeh.probsolve.entity.data.QuestionAnswers;
+import com.zeeyeh.probsolve.entity.data.QuestionImportTask;
 import com.zeeyeh.probsolve.exceptions.GlobalError;
 import com.zeeyeh.probsolve.exceptions.ServiceException;
 import com.zeeyeh.probsolve.provider.TokenProvider;
@@ -14,7 +16,9 @@ import com.zeeyeh.probsolve.questions.QuestionLibFileHandler;
 import com.zeeyeh.probsolve.service.QuestionAnswersService;
 import com.zeeyeh.probsolve.service.QuestionCategoriesService;
 import com.zeeyeh.probsolve.service.QuestionCategoryRelationService;
+import com.zeeyeh.probsolve.service.QuestionImportTaskService;
 import com.zeeyeh.probsolve.vo.basic.QuestionCategoryVo;
+import com.zeeyeh.probsolve.vo.basic.QuestionImportTaskStatusVo;
 import com.zeeyeh.probsolve.vo.basic.QuestionVo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,18 +45,33 @@ public class UploadController {
     private final QuestionCategoriesService questionCategoriesService;
     private final QuestionCategoryRelationService questionCategoryRelationService;
     private final QuestionAnswersService questionAnswersService;
+    private final QuestionImportTaskService questionImportTaskService;
 
-    public UploadController(FileHandlerFactory fileHandlerFactory, TokenProvider tokenProvider, QuestionCategoriesService questionCategoriesService, QuestionCategoryRelationService questionCategoryRelationService, QuestionAnswersService questionAnswersService) {
+    public UploadController(FileHandlerFactory fileHandlerFactory, TokenProvider tokenProvider, QuestionCategoriesService questionCategoriesService, QuestionCategoryRelationService questionCategoryRelationService, QuestionAnswersService questionAnswersService, QuestionImportTaskService questionImportTaskService) {
         this.fileHandlerFactory = fileHandlerFactory;
         this.tokenProvider = tokenProvider;
         this.questionCategoriesService = questionCategoriesService;
         this.questionCategoryRelationService = questionCategoryRelationService;
         this.questionAnswersService = questionAnswersService;
+        this.questionImportTaskService = questionImportTaskService;
+    }
+
+    @GetMapping("question/import/status/{taskId}")
+    @ResponseBody
+    public Integer getStatus(@PathVariable String taskId) {
+        QuestionImportTask task = questionImportTaskService.getByTaskId(taskId);
+        return task.getStatus();
+    }
+
+    @GetMapping("question/import/status")
+    @ResponseBody
+    public List<QuestionImportTaskStatusVo> getStatusBatch(@RequestParam List<String> ids) {
+        return questionImportTaskService.getStatusBatch(ids);
     }
 
     @PostMapping("question")
     @ResponseBody
-    private void uploadQuestion(UploadQuestionImportDto importDto, HttpServletRequest request) {
+    public R<String> uploadQuestion(UploadQuestionImportDto importDto, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         Long userId = tokenProvider.getClaim(token, "id").asLong();
         if (!fileHandlerFactory.supports(importDto.getType())) {
@@ -62,26 +81,23 @@ public class UploadController {
         File questionTaskFolder = fileHandlerFactory.getQuestionTaskFolder();
         MultipartFile file = importDto.getFile();
         String filename = file.getOriginalFilename();
-        String targetFilename = UUID.randomUUID().toString().replace("-", "");
         String extName = ".pb";
         if (filename != null) {
             extName = filename.substring(filename.lastIndexOf("."));
         }
-        targetFilename += extName;
-        File targetFile = new File(questionTaskFolder, targetFilename);
+        String taskId = UUID.randomUUID().toString().replace("-", "");
+        File targetFile = new File(questionTaskFolder, taskId + extName);
         try {
             importDto.getFile().transferTo(targetFile);
         } catch (IOException e) {
             throw new ServiceException(GlobalError.QUESTION_UPLOAD_ERROR);
         }
-        QuestionLibFileHandler handler = fileHandlerFactory.getHandler(importDto.getType());
-        try {
-            byte[] bytes = Files.readAllBytes(targetFile.toPath());
-            handler.handler(bytes, userId);
-        } catch (IOException e) {
-            e.fillInStackTrace();
-            throw new ServiceException(GlobalError.QUESTION_IMPORT_FAILED);
-        }
+        fileHandlerFactory.importQuestions(
+                taskId,
+                targetFile,
+                importDto.getType(),
+                userId);
+        return R.success(taskId);
     }
 
 
@@ -91,7 +107,6 @@ public class UploadController {
      */
     @PostMapping("question/derive")
     public void derive(@RequestBody QuestionLibDeriveDto deriveDto, HttpServletResponse response) {
-
         JSONObject jsonObject = new JSONObject();
         QuestionCategoryVo questionCategoryVo = questionCategoriesService.detail(deriveDto.getId());
         jsonObject.put("lib_name", questionCategoryVo.getName());

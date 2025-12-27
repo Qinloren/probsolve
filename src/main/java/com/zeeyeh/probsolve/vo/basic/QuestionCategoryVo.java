@@ -43,6 +43,11 @@ public class QuestionCategoryVo {
     private String signature;
 
     /**
+     * 任务Id
+     */
+    private String taskId;
+
+    /**
      * 创建时间
      */
     private Long createTime;
@@ -64,6 +69,7 @@ public class QuestionCategoryVo {
                 .setStatus(questionCategories.getStatus())
                 .setSize(questionCategories.getSize())
                 .setSignature(questionCategories.getSignature())
+                .setTaskId(questionCategories.getTaskId())
                 .setCreateTime(questionCategories.getCreateTimestamp())
                 .setUpdateTime(questionCategories.getUpdateTimestamp());
     }
@@ -140,6 +146,15 @@ public class QuestionCategoryVo {
 
     public QuestionCategoryVo setSignature(String signature) {
         this.signature = signature;
+        return this;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public QuestionCategoryVo setTaskId(String taskId) {
+        this.taskId = taskId;
         return this;
     }
 

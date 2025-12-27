@@ -7,7 +7,9 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zeeyeh.probsolve.dto.question.answer.QuestionAnswerCreateDto;
 import com.zeeyeh.probsolve.dto.question.answer.QuestionAnswerSearchDto;
 import com.zeeyeh.probsolve.dto.question.answer.QuestionAnswerUpdateDto;
+import com.zeeyeh.probsolve.entity.ImportRow;
 import com.zeeyeh.probsolve.entity.data.QuestionAnswers;
+import com.zeeyeh.probsolve.entity.data.QuestionCategoryRelation;
 import com.zeeyeh.probsolve.entity.data.Questions;
 import com.zeeyeh.probsolve.exceptions.GlobalError;
 import com.zeeyeh.probsolve.exceptions.ServiceException;
@@ -18,6 +20,7 @@ import com.zeeyeh.probsolve.vo.basic.QuestionAnswerVo;
 import com.zeeyeh.probsolve.vo.search.QuestionAnswerSearchVo;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
