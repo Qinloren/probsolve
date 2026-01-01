@@ -41,7 +41,7 @@ jobs:
 
     - name: Prepare jar artifact
       run: |
-        cp target/probsolve-*.jar probsolve-server-${{ steps.version.outputs.version }}
+        cp target/probsolve-*.jar probsolve-server-${{ steps.version.outputs.version }}.jar
 
     - name: Build Docker Image
       run: |
