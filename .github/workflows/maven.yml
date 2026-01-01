@@ -49,7 +49,7 @@ jobs:
 
     - name: Save Docker Image
       run: |
-        docekr save qinloren/probsolve-server:${{ steps.version.outputs.version }} \
+        docker save qinloren/probsolve-server:${{ steps.version.outputs.version }} \
           -o probsolve-server-${{ steps.version.outputs.version }}.tar
 
     - name: Create Github Release
