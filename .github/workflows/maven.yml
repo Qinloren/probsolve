@@ -45,7 +45,7 @@ jobs:
 
     - name: Build Docker Image
       run: |
-       docker build -t qinloren/probsolve-server:${{ steps.version.outputs.version }}
+       docker build -t qinloren/probsolve-server:${{ steps.version.outputs.version }} .
 
     - name: Save Docker Image
       run: |
