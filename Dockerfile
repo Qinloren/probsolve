@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY src/main/resources/application.yml application.yml
 
-COPY target/probsolve-1.0.0-SANPSHOT.jar app.jar
+COPY target/probsolve-*.jar app.jar
 
 EXPOSE 32223
 
