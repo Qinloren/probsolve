@@ -288,14 +288,13 @@ public class JsonQuestionLibFileHandler implements QuestionLibFileHandler {
             return questionAnswers;
         }
 
-        public QuestionDescription setQuestionAnswers(QuestionAnswers questionAnswers) {
+        public void setQuestionAnswers(QuestionAnswers questionAnswers) {
             this.questionAnswers = questionAnswers;
-            return this;
         }
     }
 
     @Override
     public String getType() {
-        return "pb";
+        return "json";
     }
 }

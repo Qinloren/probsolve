@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +34,7 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,8 +67,17 @@ public class UploadController {
 
     @GetMapping("question/import/status")
     @ResponseBody
-    public List<QuestionImportTaskStatusVo> getStatusBatch(@RequestParam List<String> ids) {
-        return questionImportTaskService.getStatusBatch(ids);
+    public List<QuestionImportTaskStatusVo> getStatusBatch(@RequestParam String ids) {
+        if (!StringUtils.hasText(ids)) {
+            return Collections.emptyList();
+        }
+        List<String> idList;
+        if (!ids.contains(",")) {;
+            idList = Collections.singletonList(ids);
+        } else {
+            idList = List.of(ids.split(","));
+        }
+        return questionImportTaskService.getStatusBatch(idList);
     }
 
     @PostMapping("question")
