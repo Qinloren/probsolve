@@ -2,6 +2,9 @@ package com.zeeyeh.probsolve.question.validator;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
+import com.zeeyeh.probsolve.ErrorBookApi;
+import com.zeeyeh.probsolve.ai.provider.ReasonProvider;
+import com.zeeyeh.probsolve.question.AbstractQuestionValidator;
 import com.zeeyeh.probsolve.question.QuestionValidator;
 import com.zeeyeh.probsolve.question.api.model.entity.Question;
 import com.zeeyeh.probsolve.question.api.model.enums.QuestionType;
@@ -18,16 +21,21 @@ import java.util.List;
  * @author Qinloren
  */
 @Service
-public class MultipleQuestionValidator implements QuestionValidator {
+public class MultipleQuestionValidator extends AbstractQuestionValidator implements QuestionValidator {
 
     private final QuestionAnswerService questionAnswerService;
 
-    public MultipleQuestionValidator(@Lazy QuestionAnswerService questionAnswerService) {
+    public MultipleQuestionValidator(
+            @Lazy QuestionAnswerService questionAnswerService,
+            ErrorBookApi errorBookApi,
+            ReasonProvider reasonProvider
+    ) {
+        super(errorBookApi, reasonProvider);
         this.questionAnswerService = questionAnswerService;
     }
 
     @Override
-    public boolean validate(Question question, Object answer) {
+    public boolean validate(Long userId, Question question, Object answer) {
         if (!(answer instanceof List<?>)) {
             return false;
         }
@@ -42,7 +50,12 @@ public class MultipleQuestionValidator implements QuestionValidator {
 
         List<String> sortedAnswers = answers.stream().sorted().toList();
         List<String> sortedSaveAnswers = saveAnswersArray.stream().map(Object::toString).sorted().toList();
-        return sortedAnswers.equals(sortedSaveAnswers);
+        boolean equals = sortedAnswers.equals(sortedSaveAnswers);
+        if (equals) {
+            return true;
+        }
+        this.processError(userId, "多选题", true, true, question, sortedAnswers, sortedSaveAnswers);
+        return false;
     }
 
     @Override

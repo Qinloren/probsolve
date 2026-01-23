@@ -8,6 +8,7 @@ import com.zeeyeh.probsolve.question.api.model.dto.QuestionValidationDto;
 import com.zeeyeh.probsolve.question.api.model.entity.Question;
 import com.zeeyeh.probsolve.question.api.model.vo.QuestionSearchVo;
 import com.zeeyeh.probsolve.question.api.model.vo.QuestionVo;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -57,5 +58,5 @@ public interface QuestionService extends IService<Question> {
      * @param validationDto 验证参数
      * @return 验证结果
      */
-    boolean validate(QuestionValidationDto validationDto);
+    boolean validate(QuestionValidationDto validationDto, HttpServletRequest request);
 }

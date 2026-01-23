@@ -6,6 +6,7 @@ import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zeeyeh.probsolve.common.exceptions.ResponseCode;
 import com.zeeyeh.probsolve.common.exceptions.ServiceException;
+import com.zeeyeh.probsolve.common.provider.TokenProvider;
 import com.zeeyeh.probsolve.question.api.model.dto.QuestionCreateDto;
 import com.zeeyeh.probsolve.question.api.model.dto.QuestionSearchDto;
 import com.zeeyeh.probsolve.question.api.model.dto.QuestionUpdateDto;
@@ -17,7 +18,9 @@ import com.zeeyeh.probsolve.question.manager.QuestionValidatorManager;
 import com.zeeyeh.probsolve.question.mapper.QuestionMapper;
 import com.zeeyeh.probsolve.question.service.QuestionService;
 import com.zeeyeh.probsolve.user.api.UserApi;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,6 +38,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     private final UserApi userApi;
     private final QuestionValidatorManager questionValidatorManager;
+    private final TokenProvider tokenProvider;
 
     @Override
     public QuestionVo create(QuestionCreateDto createDto) {
@@ -161,7 +165,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     @Override
-    public boolean validate(QuestionValidationDto validationDto) {
+    public boolean validate(QuestionValidationDto validationDto, HttpServletRequest request) {
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        Long userId = tokenProvider.getClaim(token, "id").asLong();
         QueryWrapper queryWrapper = QueryWrapper.create().eq(Question::getId, validationDto.getQuestionId());
         if (!this.exists(queryWrapper)) {
             throw new ServiceException(ResponseCode.PARAM_ERROR, "题目不存在");
@@ -171,6 +177,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         if (!questionValidatorManager.supports(type)) {
             throw new ServiceException(ResponseCode.PARAM_ERROR, "题目类型不支持");
         }
-        return questionValidatorManager.getValidator(type).validate(questions, validationDto.getAnswer());
+        return questionValidatorManager.getValidator(type).validate(userId, questions, validationDto.getAnswer());
     }
 }

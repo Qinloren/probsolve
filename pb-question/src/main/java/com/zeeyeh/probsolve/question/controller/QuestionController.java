@@ -83,8 +83,8 @@ public class QuestionController {
      */
     @PostMapping("validate")
     @ResponseBody
-    public boolean validate(@RequestBody QuestionValidationDto validationDto) {
-        return questionService.validate(validationDto);
+    public boolean validate(@RequestBody QuestionValidationDto validationDto, HttpServletRequest request) {
+        return questionService.validate(validationDto, request);
     }
 
     /**

@@ -19,6 +19,7 @@
         <pb-user.version>1.3.0</pb-user.version>
         <pb-question.version>1.3.0</pb-question.version>
         <pb-question-import-task.version>1.3.0</pb-question-import-task.version>
+        <pb-errorbook.version>1.3.0</pb-errorbook.version>
     </properties>
 
     <dependencies>
@@ -41,6 +42,11 @@
             <groupId>com.zeeyeh</groupId>
             <artifactId>pb-question-import-task</artifactId>
             <version>${pb-question-import-task.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zeeyeh</groupId>
+            <artifactId>pb-errorbook</artifactId>
+            <version>${pb-errorbook.version}</version>
         </dependency>
     </dependencies>
 

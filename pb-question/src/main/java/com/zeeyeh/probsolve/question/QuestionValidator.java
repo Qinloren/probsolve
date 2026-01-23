@@ -10,11 +10,12 @@ import com.zeeyeh.probsolve.question.api.model.entity.Question;
 public interface QuestionValidator {
     /**
      * 验证答案
+     * @param userId 用户 Id
      * @param question 题目
      * @param answer 答案
      * @return 验证结果
      */
-    boolean validate(Question question, Object answer);
+    boolean validate(Long userId, Question question, Object answer);
 
     /**
      * 获取题目类型
